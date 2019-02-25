@@ -1,0 +1,42 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+vector<int> Solution::preorderTraversal(TreeNode* A) {
+    //pre order traveral-- root left right
+    //rather than using the recursion method let use stack
+    
+    stack<TreeNode*> st;
+    vector<int> result;
+    if(A==NULL)
+       return result;
+    st.push(A);
+    
+    while(!st.empty())
+    {
+        //take top elem from stack and print it
+        TreeNode* current=st.top();
+        result.push_back(current->val);
+        
+        st.pop();//don't forget to pop the processed element
+        
+        //check if its left and right child exists if yes , put it on stack
+        //order in which u should push the element must be right than left
+        
+         if(current->right)
+             st.push(current->right);
+        if(current->left)
+           st.push(current->left);
+       
+        
+        
+    }
+    
+    
+  return result;
+}
