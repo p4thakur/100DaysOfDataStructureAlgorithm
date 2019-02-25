@@ -1,0 +1,43 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+vector<int> Solution::postorderTraversal(TreeNode* A) {
+    //again solving using recursion is pretty easy so
+    //we gonna solve it using stack
+    //post order left right root...(lets try to solve for root right left  and than reverse the answer)
+
+    vector<int> result;
+    if(A==NULL)
+    return result;
+    
+    stack<TreeNode*> st;
+    st.push(A);
+    
+    while(!st.empty()){
+        
+        TreeNode* current=st.top();
+        
+        result.push_back(current->val);
+        st.pop();
+        
+        if(current->left)
+           st.push(current->left);
+           
+        if(current->right)
+         st.push(current->right);
+        
+        
+    }
+    
+    //now reverse the result
+    
+    reverse(result.begin(),result.end());
+    
+ return result;    
+}
