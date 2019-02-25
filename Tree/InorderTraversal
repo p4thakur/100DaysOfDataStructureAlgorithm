@@ -1,0 +1,47 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+vector<int> Solution::inorderTraversal(TreeNode* A) {
+    
+    //Inorder is left root right.
+    //using recursion is easy but do it using stack to learn more abou it
+    //and it will be usefull in complicated problem
+    
+    vector<int> result;
+    if(A==NULL) return result;
+    
+    stack<TreeNode*> st;
+    st.push(A);
+    //TreeNode* root=A;
+    while(!st.empty())
+    {
+        
+        //take top element from stack and check if its left exist,if yes put it
+        //in the stack and make sure to make left of current element to null to prevent cycle
+        TreeNode* root=st.top();
+        
+        if(root->left)
+         {
+             st.push(root->left);
+             root->left=NULL;
+         }
+        else
+        {
+            
+              result.push_back(root->val);
+              st.pop();
+              if(root->right)
+               st.push(root->right);
+            
+        }
+        
+    }
+   return result; 
+    
+}
