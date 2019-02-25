@@ -1,1 +1,1 @@
-# DataStructure-and-Algorithem-for-Interview
+# DataStructure-and-Algorithm-for-Interview
