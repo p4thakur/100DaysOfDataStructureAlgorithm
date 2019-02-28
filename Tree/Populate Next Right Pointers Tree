@@ -1,0 +1,75 @@
+/*
+Given a binary tree
+
+    struct TreeLinkNode {
+      TreeLinkNode *left;
+      TreeLinkNode *right;
+      TreeLinkNode *next;
+    }
+Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+
+Initially, all next pointers are set to NULL.
+*/
+
+/**
+ * Definition for binary tree with next pointer.
+ * struct TreeLinkNode {
+ *  int val;
+ *  TreeLinkNode *left, *right, *next;
+ *  TreeLinkNode(int x) : val(x), left(NULL), right(NULL), next(NULL) {}
+ * };
+ */
+void Solution::connect(TreeLinkNode* root) {
+    
+TreeLinkNode* current=root, * previous=NULL, *leftMostLevel=NULL;
+
+//while i didn't visited eeach level
+while(current){
+    
+    // starting code for each level
+        
+        // while u didn't cover each node at this level keep visiting
+        while(current)
+        {
+            //check if lfet child exist 
+            //if yes than check if this is the first node of new level by checking for prev==NULL
+            if(current->left){
+                if(previous==NULL){
+                    leftMostLevel=current->left;
+                    previous=leftMostLevel;
+                }
+                else{
+                    previous->next=current->left;
+                    previous=current->left;
+                }
+                
+            }
+            
+            
+            //check if right child exist 
+            //if yes than check if this is the first node of new level by checking for prev==NULL
+            if(current->right){
+                if(previous==NULL){
+                    leftMostLevel=current->right;
+                    previous=leftMostLevel;
+                }
+                else{
+                    previous->next=current->right;
+                    previous=current->right;
+                }
+                
+            }
+            
+            //move next in current level
+            current=current->next;
+            
+        }
+    
+    
+    // after finishing the current level update values for next level
+    current=leftMostLevel;
+    leftMostLevel=NULL;
+    previous=NULL;
+}
+
+}
