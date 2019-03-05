@@ -1,0 +1,74 @@
+Given inorder and postorder traversal of a tree, construct the binary tree.
+
+ Note: You may assume that duplicates do not exist in the tree. 
+Example :
+
+Input : 
+        Inorder : [2, 1, 3]
+        Postorder : [2, 3, 1]
+
+Return : 
+            1
+           / \
+          2   3
+          
+   
+   /**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+ 
+
+TreeNode * BuildTreeUtil(int li,int ri,int lp,int& rp,vector<int> &A,vector<int> &B)
+{
+
+//last node inpost order will eb root node
+//if(li>ri)return NULL;
+if(li>ri)return NULL;
+
+if(rp<0) return NULL;
+
+
+//find index of B[rp] in inorder traversal
+
+TreeNode* root=new TreeNode(B[rp]);
+int i,flag=0,mid=INT32_MAX;
+for(i=li;i<=ri;i++)
+{
+
+if(A[i]==B[rp])
+    {
+        //flag=1;
+        mid=i;
+        break;
+        
+    }
+}
+//if(flag==0)
+   //return NULL;
+
+rp--;
+
+root->right=BuildTreeUtil(mid+1,ri, lp,rp,A,B);
+root->left=BuildTreeUtil(li, mid-1,lp,rp,A,B);
+
+
+return root;
+
+
+} 
+
+TreeNode* Solution::buildTree(vector<int> &A, vector<int> &B) {
+    
+    int temp=B.size()-1;
+    
+    TreeNode * result=BuildTreeUtil(0,A.size()-1, 0,temp, A,B);
+    
+    return result;
+}
