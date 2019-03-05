@@ -1,0 +1,62 @@
+/inorder-traversal-of-cartesian-tree/
+
+Given an inorder traversal of a cartesian tree, construct the tree.
+
+ Cartesian tree : is a heap ordered binary tree, where the root is greater than all the elements in the subtree. 
+ Note: You may assume that duplicates do not exist in the tree. 
+Example :
+
+Input : [1 2 3]
+
+Return :   
+          3
+         /
+        2
+       /
+      1
+      
+    #######################
+    /**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+TreeNode* buildTreeutil(int l,int r,vector<int> &v){
+    
+    //base condition is very imp
+    if(l>r)return NULL;
+    
+    //find max in given range
+    int MAX=INT_MIN;
+    int index_max=-1;
+    for(int i=l;i<=r;i++)
+    {
+        
+        if(v[i]>MAX){
+            MAX=v[i];
+            index_max=i;
+        }
+    }
+    
+    TreeNode *root=new TreeNode(MAX);
+    root->left=buildTreeutil(l,index_max-1,v);
+    root->right=buildTreeutil(index_max+1,r,v);
+    
+    
+    return root;
+    
+} 
+ 
+TreeNode* Solution::buildTree(vector<int> &A) {
+    
+    //largest node in the current node range will be root node
+    
+    TreeNode *result=buildTreeutil(0,A.size()-1,A);
+    
+    return result;
+}
