@@ -1,0 +1,76 @@
+/**********
+
+
+Merge k sorted linked lists and return it as one sorted list.
+
+Example :
+
+1 -> 10 -> 20
+4 -> 11 -> 13
+3 -> 8 -> 9
+
+will result in
+
+1 -> 3 -> 4 -> 8 -> 9 -> 10 -> 11 -> 13 -> 20
+
+
+note: this question template is from interviewbit.com.
+https://www.interviewbit.com/problems/merge-k-sorted-lists/
+**********************/
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+
+ 
+struct compare { 
+    bool operator()(ListNode* a, ListNode* b) 
+    { 
+        return a->val > b->val; 
+    } 
+}; 
+ListNode* Solution::mergeKLists(vector<ListNode*> &A) {
+    // Do not write main() function.
+    // Do not read input, instead use the arguments to the function.
+    // Do not print the output, instead return values as specified
+    // Still have a doubt. Checkout www.interviewbit.com/pages/sample_codes/ for more details
+
+   //we will use minimum heap of size k(top k node at any time) at any time. 
+    priority_queue<ListNode* , vector<ListNode*>, compare> pq;
+    
+    //push head of each LL to the queue....
+    for(int i=0;i<A.size();i++)
+      pq.push(A[i]);
+    
+    //create dummy node as head of my new LL
+    ListNode* headNew= new ListNode(0);
+    ListNode * newlist=headNew;
+    
+  
+    while(!pq.empty())
+    {
+        //take minimum from the heap, i.e top 
+        ListNode* top=pq.top();
+        
+        //pop that element from priority_queue
+        pq.pop();
+        
+        //update your resultant LL accordingly
+        newlist->next=top;
+        newlist=newlist->next;
+        
+     //insert next node to  the current node() if exist
+        if(top->next!=NULL)
+           pq.push(top->next);
+    }
+    
+     
+     //head of my new LL will be headNew->next;
+    return   headNew->next;
+}
