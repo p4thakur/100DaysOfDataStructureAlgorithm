@@ -1,0 +1,75 @@
+
+/****************
+You are given an array of N integers, A1, A2 ,…, AN and an integer K. Return the of count of distinct numbers in all windows of size K.
+
+Formally, return an array of size N-K+1 where i’th element in this array contains number of distinct elements in sequence Ai, Ai+1 ,…, Ai+k-1.
+
+Note:
+
+    If K > N, return empty array.
+
+For example,
+
+A=[1, 2, 1, 3, 4, 3] and K = 3
+
+All windows of size K are
+
+[1, 2, 1]
+[2, 1, 3]
+[1, 3, 4]
+[3, 4, 3]
+
+So, we return an array [2, 3, 3, 2].
+
+use interviebit for reference:
+
+*****************/
+
+vector<int> Solution::dNums(vector<int> &A, int B) {
+    
+//this will store final result    
+vector<int> ans;
+//key will be element in the aray and value their count
+unordered_map<int,int> map;
+//keep track of  count of unique character in a window of size B
+int uniqueCount;
+
+//just check for if window is smallethan array size or not
+if (B>A.size()) return ans;
+
+//fill value for first window
+for(int i=0;i<B;i++)
+  {  
+      //if this element occurs for the first time add it to unique count
+      if(map[A[i]]==0)
+        uniqueCount++;
+        
+    //increment the value count of element A[i]    
+    map[A[i]]++;    
+  }
+  
+  ans.push_back(uniqueCount);
+  
+  //now slide your window 1 by one
+  for(int i=B;i<A.size() ;i++){
+      
+        //ifthis element occurs for the first time add it to unique count
+       if(map[A[i]]==0)
+        uniqueCount++;
+        
+        map[A[i]]++;  
+        
+     //before decrementing the element which is not in the window(i-B index elemnt) check if it
+     //occur only for one time.If yes decrement unique count value
+      if(map[A[i-B]]==1)
+        uniqueCount--;
+      
+      //decrement the value at index i-b 
+       map[A[i-B]]--;
+       
+      ans.push_back(uniqueCount);
+      
+  }
+  
+  return ans;
+}
