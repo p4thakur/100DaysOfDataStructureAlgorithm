@@ -1,0 +1,112 @@
+/**********************************************
+Design and implement a data structure for LRU (Least Recently Used) cache. It should support the following operations: get and set.
+
+get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+set(key, value) - Set or insert the value if the key is not already present. When the cache reaches its capacity, it should invalidate the least recently used item before inserting the new item.
+The LRU Cache will be initialized with an integer corresponding to its capacity. Capacity indicates the maximum number of unique keys it can hold at a time.
+
+Definition of “least recently used” : An access to an item is defined as a get or a set operation of the item. “Least recently used” item is the one with the oldest access time.
+
+ NOTE: If you are using any global variables, make sure to clear them in the constructor. 
+Example :
+
+Input : 
+         capacity = 2
+         set(1, 10)
+         set(5, 12)
+         get(5)        returns 12
+         get(1)        returns 10
+         get(10)       returns -1
+         set(6, 14)    this pushes out key = 5 as LRU is full. 
+         get(5)        returns -1 
+
+visit : https://www.interviewbit.com/problems/lru-cache/ for problem template
+***********************************************************************************************/
+
+#include<bits/stdc++.h>
+//we will use  duble LL to keep track of the key, and thier order
+//order is in  such a way that last node in the LL will be least recently used one 
+list<int> doubleLinkList;
+
+//we will keep track of key- value pair in a map
+unordered_map<int,int> keyValuePairMap;
+
+// we will also keep  the mapping between key and it's location(adrres) in our Linklist
+// to make sure T.C to find a key in LL is O(1)
+unordered_map<int,list<int>::iterator>  KeyAdressMap;
+
+//max capcity of our cache(LL)
+int maxCapacity;
+
+LRUCache::LRUCache(int capacity) {
+ 
+ doubleLinkList.clear();
+ keyValuePairMap.clear();
+ KeyAdressMap.clear();
+ maxCapacity=capacity;
+}
+
+int LRUCache::get(int key) {
+
+//check if key is present in map or not. If not return -1
+ if(keyValuePairMap.find(key)==keyValuePairMap.end()) return -1;
+ 
+ /*If we reach here it mean key is present in the map. now we need to find the key in LL
+ and delete it from there and add it into the front of LL*/
+ 
+   //find key loaction in LL and delete it
+   doubleLinkList.erase(KeyAdressMap[key]);
+   
+   //insert the key at the begining of the LL
+   doubleLinkList.push_front(key);
+   
+   //update the address of the the key
+   KeyAdressMap[key]=doubleLinkList.begin();
+   
+   
+   return keyValuePairMap[key]; 
+}
+
+void LRUCache::set(int key, int value) {
+
+   /*If key is not presnet the MaP*/
+   if(keyValuePairMap.find(key)==keyValuePairMap.end())
+   {   
+       //If cache(Linllist) is full, remove the Least recentlu used element from it
+       if(maxCapacity==doubleLinkList.size())
+       {
+            //take the last node which will be your LRU node
+           int lastNode=doubleLinkList.back();
+           //pop up that last node
+           doubleLinkList.pop_back();
+           //erase last node entry from map
+           keyValuePairMap.erase(lastNode);
+           //erase entry from map
+           KeyAdressMap.erase(lastNode);
+           //push your key at the front of the LL
+           doubleLinkList.push_front(key);
+           // address map to store your new key and its address
+           KeyAdressMap[key]=doubleLinkList.begin();
+           //add key and value to your other map
+           keyValuePairMap[key]=value;
+       }
+       else
+       { 
+          //cach is not full, so all i need to do is put oue key at front of LL
+          //key, value pair inn our map1, and keyAddress maping in our address map
+          doubleLinkList.push_front(key);
+          KeyAdressMap[key]=doubleLinkList.begin();
+          keyValuePairMap[key]=value;
+       }
+   }
+   else
+   {
+       //key already presnt. first 3 step is the repeat of step in get(I can reduc this
+       // redundancy if I want)
+       doubleLinkList.erase(KeyAdressMap[key]);
+       doubleLinkList.push_front(key);
+       KeyAdressMap[key]=doubleLinkList.begin();
+       keyValuePairMap[key]=value;
+   }
+}
+
