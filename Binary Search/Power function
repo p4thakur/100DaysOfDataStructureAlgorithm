@@ -1,0 +1,69 @@
+##################################################################
+
+Implement pow(x, n) % d.
+
+In other words, given x, n and d,
+
+find (xn % d)
+
+Note that remainders on division cannot be negative. 
+In other words, make sure the answer you return is non negative.
+
+Input : x = 2, n = 3, d = 3
+Output : 2
+
+2^3 % 3 = 8 % 3 = 2.
+
+for structure of the question visit: https://www.interviewbit.com/problems/implement-power-function/
+########################################################
+
+
+
+int Solution::pow(int x, int n, int d) {
+    // Do not write main() function.
+    // Do not read input, instead use the arguments to the function.
+    // Do not print the output, instead return values as specified
+    // Still have a doubt. Checkout www.interviewbit.com/pages/sample_codes/ for more details
+ 
+ //its not an easy problem when overflow constrain is introduced...
+ 
+ //handle base case
+ if(n==0) return 1%d;
+
+
+    long long result;
+    //I made it long long because , when i multiple an int with logn, it may give me overflow
+    long long temp=x; 
+    
+    result=1;
+    
+    
+    while(n)
+    {
+        //If it's odd  than mutiple your base once with current answer
+        if(n%2)
+        {
+            result=(result*temp)%d;
+            n--;
+            
+        }
+        //if even than update your base to base* base
+        else
+        {
+        temp=(temp*temp)%d;
+         n=n>>1;
+        }
+        
+    }
+    
+    //if result is negative , i  need to make it positve as reminder canbe negative
+    //cout<<result<<" ";
+    if(result<0)result=(result+d)%d;
+    
+    return (result);
+    
+    
+}
+
+
+
