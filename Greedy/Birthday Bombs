@@ -1,0 +1,75 @@
+############################################################################
+
+It’s Tushar’s birthday today and he has N friends. Friends are numbered [0, 1, 2, …., N-1] and i-th friend have a positive strength S(i). Today being his birthday, his friends have planned to give him birthday bombs (kicks :P). Tushar’s friends know Tushar’s pain bearing limit and would hit accordingly.
+If Tushar’s resistance is denoted by R (>=0) then find the lexicographically smallest order of friends to kick Tushar so that the cumulative kick strength (sum of the strengths of friends who kicks) doesn’t exceed his resistance capacity and total no. of kicks hit are maximum. Also note that each friend can kick unlimited number of times (If a friend hits x times, his strength will be counted x times)
+
+Note:
+
+    Answer format = Vector of indexes of friends in the order in which they will hit.
+    Answer should have the maximum no. of kicks that can be possibly hit. If two answer have the same no. of kicks, return one with the lexicographically smaller.
+    [a1, a2, …., am] is lexicographically smaller than [b1, b2, .., bm] if a1 < b1 or (a1 = b1 and a2 < b2) … .
+    Input cases are such that the length of the answer does not exceed 100000.
+
+Example:
+R = 11, S = [6,8,5,4,7]
+
+ans = [0,2]
+Here, [2,3], [2,2] or [3,3] also give the maximum no. kicks.
+
+
+
+Problem statement and solution structure can be found here: https://www.interviewbit.com/problems/tushars-birthday-bombs/
+#####################################################################
+
+vector<int> Solution::solve(int A, vector<int> &B) {
+
+  //we will use greedy appraoch here.We know that we will get maximum number of kicks
+  // if we slecct friend with minimum strength.
+  //Also i can do one optimization term of space.
+  
+    int less=INT_MAX;
+    //this  will store only the needed entry from B
+    vector<int> v;
+    for(int i=0;i<B.size();i++)
+    {
+        //only enter the value in new array if it's smaller than current smallest  
+        if(B[i]<less)
+         {
+             less=B[i];
+             v.push_back(i);
+         }
+    }
+    
+    //number of kick my the smallest guy
+    int count=A/less;
+    
+    //total strengtht that smallest guys used on tushar 
+    int sum1=count*less;
+    
+    //now travesre v, to find out lexicographicall smaller index if any
+    int j=0;
+    vector<int> ans;
+    while(j<v.size())
+     {
+          //this line prevent memory limit exceed 
+          if(ans.size()>=count)break;
+          
+          //include current elemeent and subtract less from it and check if sum didnpt go
+          //beyond maximum limit than include it
+         int temp=sum1- less +B[v[j]];
+         
+         if(temp<=A)
+            {
+                ans.push_back(v[j]);
+                sum1=temp;
+                //don't incrment j yet, we can use same element again
+            }
+         //move to next element
+         else
+           j++;
+     }
+     
+
+       
+   return ans;
+}
