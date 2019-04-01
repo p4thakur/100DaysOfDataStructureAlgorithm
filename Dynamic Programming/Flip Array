@@ -1,0 +1,93 @@
+#################################################
+
+Given an array of positive elements, you have to flip the sign of some of its elements such that the resultant sum of the elements of array should be minimum non-negative(as close to zero as possible). Return the minimum no. of elements whose sign needs to be flipped such that the resultant sum is minimum non-negative.
+
+Constraints:
+
+ 1 <= n <= 100
+Sum of all the elements will not exceed 10,000.
+
+Example:
+
+A = [15, 10, 6]
+ans = 1 (Here, we will flip the sign of 15 and the resultant sum will be 1 )
+
+A = [14, 10, 4]
+ans = 1 (Here, we will flip the sign of 14 and the resultant sum will be 0)
+
+For problem statement and strucre refer : https://www.interviewbit.com/problems/flip-array/
+###################################################
+
+
+int Solution::solve(const vector<int> &A) {
+    
+    
+    int elementCount=A.size();
+    /****we will calculate minimum number of element needed for getting value sum=sum/2, as this will ensure
+    that some of the element will be +ve and other negative *****/ 
+    int sum=0;
+    for(int i=0;i<elementCount ;i++)
+       sum+=A[i];
+       
+     sum=sum/2;
+     
+    /*****dp[i][j] ->this indicate minimum number of element required when you have i element
+    and you wwant to achieve sum of j.*****/
+    
+    //initilaize minimum  number of element to INT_MAX
+    vector<vector<int>> dp(elementCount+1, vector<int>(sum+1, INT_MAX) );
+    
+    for(int i=0;i<=elementCount;i++)
+     for(int j=0;j<=sum;j++)
+        {
+            //If no element present and sum needed is 0
+            if(i==0 && j==0){dp[i][j]=0 ; continue;}
+            
+            /***when no element present but sum is non zero than we cannot get min number of element
+            for this. Set it to some alternate value(which is INT_MAX in this case) ******/
+            if(i==0){dp[i][j]=INT_MAX; continue;}
+            
+            //when some element are presnet and we need sum to be 0, we can get 0 sum by not
+            //selecting any ellement
+            if(j==0){dp[i][j]=0 ; continue; }
+            
+            //All base condtion are cover by this point
+            
+            //check if i can include current element and  it didn't overflow my sum
+            if(j-A[i-1]>=0)
+            {
+                /***Now it's upto us whether we need to include current element or not
+                 we will choose one  who give minimum no of element ****/
+                int includeElement=INT_MAX, excludeElement=INT_MAX;
+                
+                //This check is important. why? Because if it's value is INT_MAX and we are
+                //adding +1 to INY_MAX it will cause overflow thus i may get some random negative value
+                 //and this willl effect our result
+                  if(dp[i-1][j-A[i-1]]!=INT_MAX)
+                  includeElement=dp[i-1][j-A[i-1]] +1;
+                  
+                excludeElement=dp[i-1][j];
+                
+                dp[i][j]=min(includeElement, excludeElement);
+            }
+            //I can not include my current element
+            else
+            {
+                dp[i][j]=dp[i-1][j];
+            }
+        }
+        
+  
+  /*Now our aim was that we need value close to sum=sum/2. Our array element value
+  may not sumup to give valu=sum, thus we need to find first value from  (sum to 0) which
+  is not INT_MAX and that will be my answer
+  */      
+  for(int i=sum;i>=0;i--)
+  {
+      if(dp[elementCount][i]!=INT_MAX)
+        return dp[elementCount][i];
+  }
+    /*****If all value in above case is INT_MAX, it mean we cannot get any value between
+    sum/2 to 0 by selecting n element of array***/
+    return INT_MAX;
+}
