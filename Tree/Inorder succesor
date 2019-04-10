@@ -1,0 +1,100 @@
+Find inorder succesor of the tree
+
+Example:
+
+Given the tree
+
+               100
+              /   \
+            98    102
+           /  \
+         96    99
+          \
+           97
+Given 97, you should return the node corresponding to 98 as thats the value just greater than 97 in the tree.
+If there are no successor in the tree ( the value is the largest in the tree, return NULL).
+#######################################
+
+
+
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+TreeNode* find(TreeNode* A, int b){
+    //bst so do binary search...to fo searching in logn 
+    
+    if(A==NULL) return A;
+    if(A->val==b) return A;
+    
+    if(A->val>b)//go to left
+       return find(A->left, b);
+    else
+       return find(A->right,b);
+    //if element is less than root go to left 
+    
+}
+
+TreeNode* InorderSuccesor(TreeNode* current,TreeNode* root){
+    
+    //check if its right exist , if yes go to right and find ur inorder succesor
+    if(current->right)
+      {
+          current=current->right;
+          while(current->left)
+            current=current->left;
+        
+        return current;    
+      }
+      
+      else
+     {//inorder succsor must be one of parent
+    TreeNode* ansestor=NULL;
+     TreeNode * pred=root;
+     
+     while(pred!=current)
+     {
+         int value=current->val;
+         //ansestor=pred;   i made mistake here..
+         if(pred->val>value)
+            {
+                ansestor=pred;/// look inorder inparent will also be the deepest left node
+                              // i was doing it all wrong together..one thing is my
+            //predecoor is moving one step at atime , mut my ancestor depen on the pred
+            // so don't think that ansestor will also going to move  1 step NO!. ancestor
+            //node will movw whenever current node have left child(so it can jump from one of the
+            //node to others)
+                pred=pred->left;
+            }
+            else
+              pred=pred->right;
+         
+     }
+        return ansestor; 
+          
+      }
+}
+TreeNode* Solution::getSuccessor(TreeNode* A, int B) {
+    // Do not write main() function.
+    // Do not read input, instead use the arguments to the function.
+    // Do not print the output, instead return values as specified
+    // Still have a doubt. Checkout www.interviewbit.com/pages/sample_codes/ for more details
+ //find node if preseent or not
+ TreeNode* result=NULL;
+    TreeNode* current=find(A,B);
+    if(current==NULL) return  result;
+    //now go and find inorder successor
+    
+    result=InorderSuccesor(current,A);
+    
+    return result;
+    //return your ansr
+    
+}
+####################################
