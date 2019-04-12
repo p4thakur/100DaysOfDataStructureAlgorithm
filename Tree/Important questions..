@@ -47,8 +47,24 @@ https://www.geeksforgeeks.org/add-greater-values-every-node-given-bst/
 
 https://www.geeksforgeeks.org/median-of-stream-of-integers-running-integers/ ---using BBST and heap
 
+https://www.geeksforgeeks.org/largest-bst-binary-tree-set-2/ --->it just a variation of finding wether a tree is BST or not, One thing
+that i need to to take care is , even if tree is not BST i need to update my maximum value according.  This is a good question.
 
+https://www.geeksforgeeks.org/total-number-of-possible-binary-search-trees-with-n-keys/
+https://www.geeksforgeeks.org/print-nodes-top-view-binary-tree/  -- it like vertical order traversal,but again if i want a specific order
+which in this case is first nofr at each horizntal distance, go with level order traversal using queue , rather than recursion one...
 
+https://www.geeksforgeeks.org/print-leftmost-and-rightmost-nodes-of-a-binary-tree/  --use level order traversal/ or just find left and right view method
+
+https://www.geeksforgeeks.org/print-k-sum-paths-binary-tree/  --- Kindly note that this problem is significantly different from finding
+k-sum path from root to leaves. Here each node can be treated as root, hence the path can start and end at any node.Here i will first 
+find out path array which will contain all the element in rot path, and than iwill traverse this path array to check if there is a path
+who sum equal to k..
+
+https://www.geeksforgeeks.org/print-nodes-distance-k-given-node-binary-tree/ -- it's a complicated question
+
+https://www.geeksforgeeks.org/diagonal-traversal-of-binary-tree/  -->keeping track of V, vertical ditance, i will only increment vertical
+distace when i recur for left child......
 
 
 
