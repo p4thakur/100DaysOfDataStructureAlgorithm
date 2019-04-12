@@ -12,4 +12,46 @@ https://www.geeksforgeeks.org/longest-path-undirected-tree/
 
 https://www.geeksforgeeks.org/difference-between-sums-of-odd-and-even-levels/
 
+https://www.geeksforgeeks.org/find-level-maximum-sum-binary-tree/  --> it like finding maximumwidth-->just keep track of
+size of queue at each level it's and easy question then.I never observed this, So rember at any time when i was check for the 
+front of the queue , the size of queue will give me width of that level.
+
+https://www.geeksforgeeks.org/lowest-common-ancestor-in-a-binary-search-tree/
+https://www.geeksforgeeks.org/print-common-nodes-in-two-binary-search-trees/   -->this is more like finding two node with given target.here
+we will do inorder traversal for both fron front..and than compare node if equal we found or answer, else either move first node or move 
+second node.....
+
+https://www.geeksforgeeks.org/print-left-view-binary-tree/ --> use two variable ,level and maxlevel.wheneever level>maxlevel..this will
+bt the firxt node of that level. Update maxlevel value at base case.Iterative approch: do level order traversal and print firxt node at
+each level..https://www.geeksforgeeks.org/iterative-method-to-print-left-view-of-a-binary-tree/
+
+In many variation of level order travesal question count of queuye level is very important.. int nodeCount = q.size(); Practice it,u might get confused
+https://www.geeksforgeeks.org/print-level-order-traversal-line-line/
+
+https://www.geeksforgeeks.org/print-nodes-at-k-distance-from-root/..one of the easiest recurion problem..
+https://www.geeksforgeeks.org/print-nodes-binary-tree-k-leaves/
+
+https://www.geeksforgeeks.org/print-right-view-binary-tree-2/ -- similar to left view,only difference is reverse inorder
+
+https://www.geeksforgeeks.org/serialize-deserialize-binary-tree/
+ --
+https://www.geeksforgeeks.org/construct-bst-from-given-preorder-traversa/ -- this is one of the most import question and concept.solution
+1.i know first element will we a[0]..now all the element between INT_MIN to a[0] will be part of left subtree and all elelemnt betwen
+a[0] to max will be part of right subtree...
+https://www.geeksforgeeks.org/construct-bst-from-given-preorder-traversal-set-2/  -- using stack iteratively also easy..:keep a stack
+of nodes. now push the node if next elemnt is less than top of stack and make this node as left child of top node.else ifnext element
+is greater than top keepping poppingout element from stack till value is greater than top of stack, than take that last pop up value and
+make current element as it's right child.....
+
+https://www.geeksforgeeks.org/add-greater-values-every-node-given-bst/
+
+https://www.geeksforgeeks.org/median-of-stream-of-integers-running-integers/ ---using BBST and heap
+
+
+
+
+
+
+
+
 
