@@ -24,7 +24,7 @@ Return :
  */
  
  
-
+//passing the rp as refrence is the most important step , other thing is fairley intuative
 TreeNode * BuildTreeUtil(int li,int ri,int lp,int& rp,vector<int> &A,vector<int> &B)
 {
 
