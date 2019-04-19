@@ -1,0 +1,123 @@
+
+Given a singly linked list
+
+    L: L0 → L1 → … → Ln-1 → Ln,
+reorder it to:
+
+    L0 → Ln → L1 → Ln-1 → L2 → Ln-2 → …
+You must do this in-place without altering the nodes’ values.
+
+For example,
+Given {1,2,3,4}, reorder it to {1,4,2,3}.
+####################################################
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ 
+ListNode * reverselist(ListNode* head){
+    
+    ListNode *curr=head, *prev=NULL,*next=head;
+    
+    if(head==NULL || head->next==NULL) return head;
+    
+    while(curr){
+        next=curr->next;
+        curr->next=prev;
+        prev=curr;
+        curr=next;
+    }
+    
+  head=prev;
+  
+  return head;
+} 
+
+ListNode * mergeList(ListNode * head1, ListNode *head2){
+    
+    
+    ListNode *newHead=head1;
+    head1=head1->next;
+    ListNode * dummy=newHead;
+    int flag=0;// 1 means first half 
+    while(head1 && head2)
+    {
+     //
+     if(flag)
+     {
+         newHead->next=head1;
+         newHead=head1;
+         head1=head1->next;
+         
+         flag=0;
+     }
+     else{
+        // head1=newhead->next;
+         newHead->next=head2;
+         newHead=head2;
+         head2=head2->next;
+         flag=1;
+     }
+     
+    }
+    
+    while(head1){
+        
+        newHead->next=head1;
+         newHead=head1;
+         head1=head1->next;
+        
+    }
+    
+    while(head2){
+     newHead->next=head2;
+         newHead=head2;
+         head2=head2->next;   
+    }
+    
+    
+    return dummy;
+}
+ListNode* Solution::reorderList(ListNode* A) {
+    
+    /*there are three key steps to it:
+    1:find middle
+    2:reverse second half
+    3:merge
+     */
+    
+    //find middle to revrse the list
+    ListNode * slow,*fast,*prevslow;
+    
+    slow=A;
+    fast=A;
+    //to keep track of node node before the slow pointer
+    prevslow=NULL;
+    
+    //check for base condition1: if there is no node or just one node
+    if(A==NULL || A->next==NULL) return A;
+    
+    while(fast && fast->next){
+        slow=slow->next;
+        fast=fast->next->next;
+    }
+    prevslow=slow;
+    slow=slow->next;
+    prevslow->next=NULL;
+    
+   
+    //slow pointer now pointing to second half of the LL , so reverse it
+    ListNode* reverseHead= reverselist(slow);
+    
+    
+    //merge list..A and revrsehead
+    
+   return  mergeList(A,reverseHead);
+    
+}
