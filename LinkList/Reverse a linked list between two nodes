@@ -1,0 +1,84 @@
+Reverse a linked list from position m to n. Do it in-place and in one-pass.
+
+For example:
+Given 1->2->3->4->5->NULL, m = 2 and n = 4,
+
+return 1->4->3->2->5->NULL.
+
+############################################################
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ 
+ 
+ ListNode  * reverseLL(ListNode * curr, ListNode *end, ListNode *prev){
+    //in generic way of implementing LL we set out Prev value to NULL which indicate value after end
+    //here our last value will be node after n th node, so set prev to node after n
+    ListNode * next=curr;
+    while(curr!=end)
+    {
+        next=curr->next;
+        curr->next=prev;
+        prev=curr;
+        curr=next;
+    }
+    
+    return prev;
+}
+
+
+ListNode* Solution::reverseBetween(ListNode* A, int B, int C) {
+    
+    //find m nd n..in one parse
+    if(A==NULL || A->next==NULL) return A;
+    //prevm= keep track of previous node of m
+    ListNode *prevm,*mnode;
+    //prevn keep track of next node after n...(I know name is confusing)
+    ListNode * prevn, *nnode;
+    int m=B,n=C;
+    mnode=NULL;nnode=NULL;
+    ListNode * curr=A;
+    //traverse till u don't reach to m and n...
+    while(curr && (m || n))
+    {
+        
+        if(m){
+            prevm=mnode;
+            mnode=curr;
+            m--;
+        }
+        
+        if(n){
+            
+            nnode=curr;
+            prevn=nnode->next;// it store next pointer
+            n--;
+        }
+    
+        curr=curr->next;
+    }
+    
+    //Now revrse your LL
+  ListNode * temp=reverseLL(mnode, prevn,prevn);
+   
+   
+   //this extra check for handling cases  where whole LL need to be revrse
+   if(prevm!=NULL)
+       prevm->next=temp;
+   else
+     return temp;
+   
+   return A;
+
+    //also i need to update the second part
+    
+}
+
+
+#################################################
