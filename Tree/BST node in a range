@@ -1,0 +1,54 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+int Solution::solve(TreeNode* A, int B, int C) {
+    //This range qustion is the basic for prooving is tree is BST(where we start from range -invity to infinity)
+    //not in this question not decresing the range of B,C while moving left right won't
+    //effect ur answers
+    int count=0;
+    
+    if(A==NULL) return 0;
+    
+    //if elemnt not in range.I mad this mistake . I shlud not return 0 as if this current value 
+    //doenot lie in the range than it doesn;t mean its left and right chhild also won't lie in it
+    // if(A->val<B || A->val>C)
+    //   return 0;
+    
+    // else
+    if(A->val>=B && A->val<=C)
+     count=1;
+    //at this point I am sure it lie in my range so go left and right of it
+    int leftv=solve(A->left,B,C);// I dece
+    int rightv=solve(A->right,B,C);
+    
+    return leftv+rightv+count;///+1 becuse current node fall in range
+    //Other more clear .recursive way of solvng this:-->Try to use it as it has more info
+    /*
+     Base case 
+    if (!root) return 0; 
+  
+    // Special Optional case for improving efficiency 
+    if (root->data == high && root->data == low) 
+        return 1; 
+  
+    // If current node is in range, then include it in count and 
+    // recur for left and right children of it 
+    if (root->data <= high && root->data >= low) 
+         return 1 + getCount(root->left, low, high) + 
+                    getCount(root->right, low, high); 
+  
+    // If current node is smaller than low, then recur for right 
+    // child 
+    else if (root->data < low) 
+         return getCount(root->right, low, high); 
+  
+    // Else recur for left child 
+    else return getCount(root->left, low, high); 
+    */
+}
