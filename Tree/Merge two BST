@@ -1,0 +1,98 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+void inorderTraversal(vector<int> &ans, stack<TreeNode*>  st)
+{
+    
+    while(!st.empty())
+    {
+        TreeNode* temp=st.top();
+        
+        if(temp->left)
+         {
+             st.push(temp->left);
+             temp->left=NULL;
+         }
+         
+         else{
+             
+             ans.push_back(temp->val);
+             st.pop();
+             if(temp->right)
+               st.push(temp->right);
+         }
+    }
+}
+vector<int> Solution::solve(TreeNode* A, TreeNode* B) {
+    
+    //using inorder traversal in thiese two tree i can do this.
+    
+    stack<TreeNode*> st1,st2;
+    vector<int> ans;
+    //if(A==NULL && B==NULL)return ans;
+    if(A!=NULL)
+    st1.push(A);
+    if(B!=NULL)
+    st2.push(B);
+    
+    while(!st1.empty() && !st2.empty())
+    {
+        //1:ush left element of A first. than after that left of B(2 inorder)
+        
+        TreeNode* temp1=st1.top();
+        TreeNode* temp2=st2.top();
+        
+        if(temp1->left)
+        {
+            st1.push(temp1->left);
+            temp1->left=NULL;
+        }
+        
+        else if(temp2->left)
+        {
+            st2.push(temp2->left);
+            temp2->left=NULL;
+        }
+        
+        //both tmp and temp2 left null. now top pf stack is the next element in stack
+        else
+        {
+            if(temp1->val<=temp2->val)
+            {
+                ans.push_back(temp1->val);
+                st1.pop();
+                if(temp1->right)
+                   st1.push(temp1->right);
+            }
+            
+            else
+            {
+                ans.push_back(temp2->val);
+                st2.pop();
+                if(temp2->right)
+                   st2.push(temp2->right);
+            }
+        }
+    }
+    
+    
+    //if 
+    //if one of them not empty thAN DO INORDER TRAVERSAL ON THEM. Just like mege sort
+    if(!st1.empty())
+     {
+         inorderTraversal(ans,st1);
+     }
+      if(!st2.empty())
+     {
+         inorderTraversal(ans,st2);
+     }
+     
+     return ans;
+}
