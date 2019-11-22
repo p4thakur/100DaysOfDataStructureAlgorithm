@@ -1,0 +1,74 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+int Solution::solve(TreeNode* A, TreeNode* B) {
+    //lets do it using inorder traversal,...on
+    //lets do iterative search on both tree(Also do recursive apprach for practice)
+    stack<TreeNode*>  st1,st2;
+    
+    st1.push(A);
+    st2.push(B);
+    int ans=0;
+    if(A==NULL || B==NULL)return ans;
+    while(!st1.empty() && !st2.empty())
+    {
+        ///take top
+        TreeNode* temp1=st1.top();
+        TreeNode* temp2=st2.top();
+        if(temp1->left)
+        {
+            st1.push(temp1->left);
+            temp1->left=NULL;//we do that becuse we dont push this node again on stack..
+            
+        }
+        
+      //once i done with finding leftmost element in first tree, lets find leftmost in tree2 
+       else if(temp2->left)
+        {
+            st2.push(temp2->left);
+            temp2->left=NULL;
+            
+        }
+        
+      //at this point current top elemnt idon't have left element in both tree(which means ) 
+      else
+      {
+          //if element at top are equal than pop from both stack, and move to right of them
+         if(temp1->val==temp2->val)
+        {
+            ans+=temp1->val;
+            st1.pop();
+            st2.pop();
+            
+            if(temp1->right)
+              st1.push(temp1->right);
+            if(temp2->right)
+               st2.push(temp2->right);
+        }
+        //decide which tree node right tree i need to explore
+        if(temp1->val <temp2->val)
+        {
+            //move temp1
+            st1.pop();
+            if(temp1->right)
+              st1.push(temp1->right);
+        }
+        if(temp1->val > temp2->val)
+        {
+            st2.pop();
+            if(temp2->right)
+              st2.push(temp2->right);
+        }
+         
+      }
+        
+    }
+    
+    return ans;
+}
