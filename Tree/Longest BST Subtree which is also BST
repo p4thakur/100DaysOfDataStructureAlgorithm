@@ -1,0 +1,61 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+struct Info{
+    int max_elem;//max element under this tree
+    int min_elem;//min element under this tree
+    int ans;//lentght of maximum subtree under this node
+    int s;//size of tree with this as node
+    bool isbst;
+} ;
+
+Info solveutil(TreeNode *root)
+{
+    
+    if(root==NULL)
+    {
+        return {INT_MIN,INT_MAX, 0,0,true};
+    }
+    //leave node also BST
+    if(root->left==NULL && root->right==NULL)
+     return {root->val, root->val,1,1,true};
+     
+    //get infor of left and right subtree,based on that we will updat our current value
+    Info ls=solveutil(root->left);
+    Info rs=solveutil(root->right);
+    
+    int s1=ls.s+rs.s+1;
+    
+    Info in;
+    in.s=s1;
+    
+    //check if tree with this node is subtree
+    if(ls.isbst && rs.isbst && ls.max_elem<root->val && rs.min_elem>root->val)
+     {
+         //now update min max ans
+         //minimum element among minon left, min on right and current elemen
+         in.min_elem=min(root->val , min(ls.min_elem,rs.min_elem));
+         in.max_elem=max(root->val, max(ls.max_elem, rs.max_elem));
+         in.ans=s1;
+         in.isbst=true;
+         return in;
+     }
+     
+     //else my answer for this ndoe will be maximum among left or right tree
+     
+     in.ans=max(ls.ans,rs.ans);
+     in.isbst=false;
+     
+     return in;
+}
+int Solution::solve(TreeNode* A) {
+    
+    Info a=solveutil(A);
+    return a.ans;
+}
