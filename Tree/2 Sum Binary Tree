@@ -1,0 +1,87 @@
+Given a binary search tree T, where each node contains a positive integer, and an integer K, you have to find whether or not
+there exist two different nodes A and B such that A.value + B.value = K.
+
+Return 1 to denote that two such nodes exist. Return 0, otherwis
+
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+int Solution::t2Sum(TreeNode* A, int B) {
+    
+    TreeNode *root1=A,*root2=A;
+    
+    stack<TreeNode*>  st1,st2;
+    
+    //Inorder traversal...lets first initialize first elment
+    while(root1)
+    {
+        st1.push(root1);
+        root1=root1->left;
+    }
+    
+    root1=st1.top();
+    st1.pop();
+    int x=root1->val;
+    root1=root1->right;
+    
+    //reverse inordr..to get the first element in last
+    while(root2)
+    {
+        st2.push(root2);
+        root2=root2->right;
+    }
+    
+    root2=st2.top();
+    st2.pop();
+    int y=root2->val;
+    root2=root2->left;//go to left now
+    
+   // if(x+y==B)return 1;
+    //now I have inital value of x y now continue doing inorder and reverse inorde
+    
+    while((!st1.empty()|| root1) && (!st2.empty() || root2))
+    {
+       //move to next node in inorder
+       //if(root1==root2)return 0;
+       if(x+y<B)
+       {
+          while(root1)
+             {
+           st1.push(root1);
+           root1=root1->left;
+           }
+       
+       root1=st1.top();
+       st1.pop();
+       x=root1->val;//next element in inorder
+       root1=root1->right;
+       
+       }
+       
+       
+       //similary do this for reverse inorder
+      else if(x+y>B)
+      {
+       while(root2)
+       {
+           st2.push(root2);
+           root2=root2->right;
+       }
+       root2=st2.top();
+       st2.pop();
+       y=root2->val;
+       root2=root2->left;   
+      }
+       
+      else if(x+y==B && x!=y)return 1;  //i am assuming no dulicate in the tree
+       
+      else return 0; 
+    }
+    return 0;
+}
