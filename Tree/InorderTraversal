@@ -43,5 +43,29 @@ vector<int> Solution::inorderTraversal(TreeNode* A) {
         
     }
    return result; 
+   
+   /*****This below slotion doesnot modfy my tree structure and fairly simple , so use this...
+   vector<int> vector;
+        if(!root)
+           return vector;
+        stack<TreeNode *> s1;
+        //stack.push(root);
+        
+        while(!s1.empty() || root) {
+
+            while(root){ //go to  next, of first iterator, inorder
+                s1.push(root);
+                root = root->left;
+            }
+            root = s1.top();
+            vector.push_back(root->val);
+            s1.pop();
+            //v1 = n1->val;
+            root = root->right;
+        }
+        
+        return vector;
+   
+   ***/
     
 }
