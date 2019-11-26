@@ -1,0 +1,68 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+ int ans=0;
+ 
+ void sumNumbersUtil(TreeNode* root,int sum)
+ {
+     if(root==NULL)return ;
+     
+     sum=((sum*10)+root->val)%1003;
+    // cout<<sum;
+     if(root->left==NULL && root->right==NULL)
+      {  
+          ans=(ans+sum)%1003;
+          //cout<<"A "<<ans;
+          return;
+      }
+      
+      sumNumbersUtil(root->left,sum);
+      sumNumbersUtil(root->right, sum);
+ }
+ int Solution::sumNumbers(TreeNode* A) {
+     /**Hello Prateek, 
+
+your solution is good, you just need to take care of the global variable "ans". As your code is test against the many test case so ans is keep adding for all of them. 
+
+Work around: you need to make ans variable point to 0, before calling the util method/functions. 
+
+thanks...Avoid using global variable directly. first reInitialize it agin in method. This is one thing You should
+take care of brother:). I got the similar error before as well**/
+    ans=0;//for some reason I have reInitialize it again
+    sumNumbersUtil(A,0);
+    
+    return ans;
+}
+ 
+ //Approach -> 2
+// int ans=0; 
+// int sumNumberUtil(TreeNode* root, int sum)
+// {   
+//     if(root==NULL)return 0;
+    
+//     sum=(sum*10+root->val)%1003;
+//     if(root->left==NULL && root->right==NULL)
+//      {
+//         return sum;
+//      }
+     
+   
+     
+//     return (sumNumberUtil(root->left,sum)+ sumNumberUtil(root->right,sum))%1003;
+     
+// }
+// //i made a mistke while trying to solve it using global variable.
+// int Solution::sumNumbers(TreeNode* A) {
+    
+//     int sum=0;
+//   return  sumNumberUtil(A,0);
+    
+//   // return ans;
+// }
