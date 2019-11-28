@@ -7,32 +7,39 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
-TreeNode* sortedUtil(const vector<int> &A,int start, int end)
-{
-    
-    if(start>end)
-      return NULL;
-      
-    int mid= start+ (end-start)/2;
-   // cout<<"A "<<A[mid]<<" s"<<start<<" "<<end;
-    TreeNode* root=new TreeNode(A[mid]);
-    
-    root->left=sortedUtil(A,start,mid-1);
-    root->right=sortedUtil(A,mid+1, end);
-    
-    return root;
+int kthsmallUtil(TreeNode* root, int &k)
+{   
+    if(root==NULL)return -1;
+    int leftans=kthsmallUtil(root->left,k);
+    if(k==0)return leftans; //it mean i found element on left side
+    k--;
+    if(k==0)return root->val;// this mean current node is kth node
+    kthsmallUtil(root->right,k);  //y right mein
 }
- 
-TreeNode* Solution::sortedArrayToBST(const vector<int> &A) {
-    // Do not write main() function.
-    // Do not read input, instead use the arguments to the function.
-    // Do not print the output, instead return values as specified
-    // Still have a doubt. Checkout www.interviewbit.com/pages/sample_codes/ for more details
+int Solution::kthsmallest(TreeNode* A, int k) {
+    //using iterative appaco it is easilr to find it..
+   
+   //this is classic recusrion problem
+   if(A==NULL)return -1;
+   
+  return  kthsmallUtil(A,k);
+  
+ /**This above apprach is more nicer way of doing the same things
+ int kthsmallestRes(TreeNode *root, int k, int &current) {
+    if(root->left != NULL) {
+        int res = kthsmallestRes(root->left, k, current);        
+        if(current == k)
+            return res;
+    }
+    ++current;
+    if(current == k)
+        return root->val;
 
-    //sorted array to BBST...
-    //take middle element of array make it root and move to left and right
-    int i=0;
-    int end=A.size()-1;
-    
-    return sortedUtil(A,i,end);
+    if(root->right != NULL) {
+        int res = kthsmallestRes(root->right, k, current);        
+        if(current == k)
+            return res;
+    }    
+}*/ 
+   
 }
