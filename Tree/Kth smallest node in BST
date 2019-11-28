@@ -8,13 +8,17 @@
  * };
  */
 int kthsmallUtil(TreeNode* root, int &k)
-{   
-    if(root==NULL)return -1;
-    int leftans=kthsmallUtil(root->left,k);
-    if(k==0)return leftans; //it mean i found element on left side
+{  if(root==NULL)return -1;
+    
+    int leftvalue=kthsmallUtil(root->left,k);
+    if(k==0)return leftvalue;
     k--;
-    if(k==0)return root->val;// this mean current node is kth node
-    kthsmallUtil(root->right,k);  //y right mein
+    if(k==0)return root->val;//if root is the mu value
+    return kthsmallUtil(root->right,k);//if think on whath happen on stack than u can easily write it
+  
+    /**i don have to add it, but just make more sense
+    int rightvalue=kthsmallUtil(root->right,k)
+    if(k==0)return rightvalue**/
 }
 int Solution::kthsmallest(TreeNode* A, int k) {
     //using iterative appaco it is easilr to find it..
