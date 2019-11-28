@@ -1,0 +1,46 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+bool sumTreeUtil(TreeNode* root,int &sum)
+{
+    if(root==NULL)
+    {
+        sum=0;
+        return true;
+    }
+    //if leave node
+    if(root->left==NULL && root->right==NULL)
+    {
+        sum=root->val;
+        return true;
+    }
+    //to keep track of left and right subtree hight
+    int leftsum=0;
+    int rightsum=0;
+    
+    //is left tree a sum tree. also iget leftsum value from this
+    bool isleftSumTree=sumTreeUtil(root->left,leftsum);
+    bool isrightSumTree=sumTreeUtil(root->right,rightsum);
+ 
+   //set curent node sum value
+    sum=2*(leftsum+rightsum);//
+    //tree with current node will be sumtre when leftTree is sumtree, right tree is sumtree
+    //and sum of left and right subtree equal to current node...
+    return isleftSumTree && isrightSumTree && (leftsum+rightsum)==root->val;
+}
+int Solution::solve(TreeNode* A) {
+    int sum=0;
+    
+   if(sumTreeUtil(A,sum))
+   return 1;
+   
+   return 0;
+   
+}
