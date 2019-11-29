@@ -1,0 +1,90 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+ 
+vector<vector<int> > Solution::verticalOrderTraversal(TreeNode* root)
+{
+    
+    //let try to do it, using  BFS queue
+    
+    //hd-1...
+    
+    //stroe node address and its HD
+    queue<pair<TreeNode*, int> >  st;
+    map<int, vector<int>>  dist;
+    
+    vector<vector<int>>  ans;
+    if(root==NULL)  return ans;
+    
+    st.push(make_pair(root,0));
+    
+    while(!st.empty())
+    {
+        
+        pair<TreeNode*, int>  temp=st.front();
+        
+        dist[temp.second].push_back(temp.first->val);
+        
+        st.pop();
+        if((temp.first)->left)
+           st.push(make_pair((temp.first)->left,temp.second-1));
+        
+        if((temp.first)->right)
+           st.push(make_pair((temp.first)->right,temp.second+1));   
+           
+    }
+    
+    map<int, vector<int>>::iterator it;
+    //vector<vector<int>>  ans;
+    for(it=dist.begin(); it!=dist.end();it++)
+    {
+       ans.push_back(it->second);
+    }
+    
+    
+    return ans;
+} 
+/********* 
+void verticalOrderUtil(TreeNode* root, map<int, vector<int>> &dist,int hd)
+{
+    if(root==NULL)return ;
+    
+    dist[hd].push_back(root->val);
+    
+    verticalOrderUtil(root->left, dist, hd-1);
+    verticalOrderUtil(root->right, dist , hd+1);
+    
+    return;
+    
+}
+vector<vector<int> > Solution::verticalOrderTraversal(TreeNode* A) {
+    //TWO WAY of solving it. one usinf bfs(and hight)
+    //another keep track of hight in recursion.
+    
+    //Idea->keep a variable of of horizatal distance as key and move recusrively left and right
+    //and update the map<key, vector<int>>. at end just traverser your map to get the answer.
+    
+    map<int, vector<int>>  dist;
+    
+    verticalOrderUtil(A, dist,0);
+    
+    map<int, vector<int>>::iterator it;
+    vector<vector<int>>  ans;
+    for(it=dist.begin(); it!=dist.end();it++)
+    {
+       ans.push_back(it->second);
+    }
+    
+    
+    return ans;
+}
+//Things  learned -- I know things, we calm focus make sure you think calmly and than write it
+
+*****/
