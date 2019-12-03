@@ -1,0 +1,102 @@
+Given a binary tree of integers. All nodes in the binary tree have distinct values. You are given an integer B. You
+have to find all the nodes that are at a distance of exactly C from the node containing value B.
+
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+vector<int>  ans; 
+ 
+void KthNodeUtil(TreeNode * root, int k)
+{
+    if(root==NULL)return ;
+    
+    if(k<0)return;
+    //cout<<"K"<<k;
+    if(k==0)//than this is also at k this from my node
+      {
+          ans.push_back(root->val);
+          return;
+      }
+      
+     KthNodeUtil(root->left,k-1);
+     KthNodeUtil(root->right,k-1);
+     
+     return;
+    
+} 
+ 
+int nodeDistanceKFromGivenNode(TreeNode* root, int k,int target)
+{
+    if(root==NULL)return -1;//node node found 
+    
+    if(root->val==target)
+    {
+        //if target valu found , than look fir all node that are k distance from this node
+        KthNodeUtil(root,k);
+        return 0;//I am at 0 th distancr from this node
+    }
+    int ls=-1,rs=-1;
+    //check in leftree AND RIGHT TREE
+    ls=nodeDistanceKFromGivenNode(root->left, k,target);
+    
+    
+    //if i found the node with given value in left tree
+    if(ls!=-1)
+    {  // cout<<"Ls"<<ls;
+        //this is the seoncd case when current ode is ancestor of my target node
+        if(ls+1==k)
+        {
+            //this is one of those node
+            ans.push_back(root->val);
+            
+        }
+        //Go to its right subtree to get all node at distance ls-k-2
+        else
+        {
+            KthNodeUtil(root->right, k-ls-2);//-2 as i alrady cover two node()
+        }
+         
+        
+        return ls+1;//this information will be passed to parent
+    }
+    
+    
+    rs=nodeDistanceKFromGivenNode(root->right,k,target);
+    //if I found node in right tree
+    if(rs!=-1)
+    {
+         //this is the seoncd case when current ode is ancestor of my target node
+        if(rs+1==k)
+        {
+            //this is one of those node
+            ans.push_back(root->val);
+            
+        }
+        //Go to its left subtree to get all node at distance ls-k-2
+        else
+        {
+            KthNodeUtil(root->left, k-rs-2);//-2 as i alrady cover two node()
+        }
+         
+        
+        return rs+1;//this information will be passed to parent
+    }
+    
+    //if not found 
+    return -1;
+    
+}
+
+
+vector<int> Solution::solve(TreeNode* A, int B, int C) {
+    //Again such tyoe of question test your recursion 4 start question
+    ans.clear();
+    nodeDistanceKFromGivenNode(A,C,B);
+    return ans;
+}
