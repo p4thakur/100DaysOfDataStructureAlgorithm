@@ -1,0 +1,58 @@
+Convert an arbitrary Binary Tree to a tree that holds Children Sum Property
+Given an arbitrary binary tree, convert it to a binary tree that holds such property : 
+->For every node, data value must be equal to sum of data values in left and right children. 
+->Consider data value as 0 for NULL children. You can only increment data values in
+any node (You cannot change the structure of the tree and cannot decrement the value of any node).
+
+
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+void updatechildNode(TreeNode* root, int diff)
+{
+    if(root==NULL)return ;
+    
+    root->val+=diff;
+    
+    //again keep updating value to left node , if u can
+        if(root->left)
+           updatechildNode(root->left,diff);
+         else
+           updatechildNode(root->right,diff);
+    
+}
+TreeNode* Solution::solve(TreeNode* A) {
+    
+    if(A==NULL)return A;
+    //if leave node
+    
+    
+    TreeNode* ls=solve(A->left);
+    TreeNode* rs=solve(A->right);
+    int leftsum=0,rightsum=0;
+    if(ls)
+      leftsum=ls->val;
+    if(rs)
+      rightsum=rs->val;
+    int diff=A->val -(leftsum+ rightsum) ;
+    
+     if(diff<0)
+     A->val=leftsum+rightsum;
+     
+     if(diff>0)
+     {
+         //update children node. let add diif to left children if possible
+         if(A->left)
+           updatechildNode(A->left,diff);
+         else
+           updatechildNode(A->right,diff);
+     }
+     
+     return A;
+}
