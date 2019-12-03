@@ -1,0 +1,57 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+int Solution::solve(TreeNode* A) {
+    
+    /*** This is the shortes recursion I have ever written
+    if(A==NULL)return 0;
+    
+    return A->val -(solve(A->left) +solve(A->right));
+    
+    ****/
+    //Solution 2 using level order travesal
+    
+    long oddsum=0,evensum=0;
+    
+    queue<TreeNode*>  q;
+    if(A==NULL)return 0;
+    
+    q.push(A);
+    
+    bool oddflag=true;
+    while(!q.empty())
+    {
+        int size=q.size();//to keep track of node at each leve;
+        //flipf flag
+        
+        while(size--)//first explore all node at current level
+        {
+            //take top elemnt and add it to appropriate sum
+            
+             
+             TreeNode* temp=q.front();
+             q.pop();
+             //oddflag+= temp->val;
+             
+             if(temp->left)
+              q.push(temp->left);
+             
+             if(temp->right)
+               q.push(temp->right);
+              
+            
+          if(oddflag)oddsum+=temp->val;
+          else evensum+=temp->val;
+        }
+        oddflag=!oddflag;
+        
+    }
+    
+    return (oddsum-evensum);
+}
