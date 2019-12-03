@@ -1,0 +1,35 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+ 
+vector<int>  ans;
+
+void solveUtil(TreeNode* root, int currLevel, int &maxLevelTillNow)
+{
+    if(root==NULL)return ;
+    
+    if(currLevel==maxLevelTillNow)
+      {
+          ans.push_back(root->val);
+          maxLevelTillNow++;
+      }
+    solveUtil(root->left,currLevel+1,maxLevelTillNow);
+    solveUtil(root->right,currLevel+1,maxLevelTillNow);
+    
+}
+vector<int> Solution::LeftView(TreeNode* A) {
+    //I can solve it using iterative way(level order)
+    
+    //Recursive wayis far more easier
+    ans.clear();//this neede as ans will not be initailze from starting for different test cased
+    int currLevel=1,maxLevel=1;
+    solveUtil(A,currLevel,maxLevel);
+    
+    return ans;
+}
