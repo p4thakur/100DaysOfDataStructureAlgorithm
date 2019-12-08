@@ -1,0 +1,34 @@
+Given N bags, each bag contains Ai chocolates. There is a kid and a magician. In one unit of time, kid chooses a random bag i, eats Ai chocolates, then the magician fills the ith bag with floor(Ai/2) chocolates.
+
+Given Ai for 1 <= i <= N, find the maximum number of chocolates kid can eat in K units of time.
+
+For example,
+
+K = 3
+N = 2
+A = 6 5
+
+Return: 14
+############################################
+#define MOD 1000000007
+
+int Solution::nchoc(int A, vector<int> &B) {
+    
+    
+    priority_queue<int>  heap;
+    for(int i=0;i<B.size();i++)
+       heap.push(B[i]);
+       
+   long sum=0;       
+    while(A && heap.size()>0)
+    {
+        long x=heap.top();
+       /// cout<<x<<" sum"<<sum<<" ";
+        sum=(sum+x)%MOD;
+        heap.pop();
+        heap.push(x/2);
+        A--;
+    }
+    
+    return (int)sum;
+}
