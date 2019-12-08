@@ -1,0 +1,67 @@
+You are the boss of the company having N employees. Given an array A of N integers representing representing initial salary of employees.
+Since you are the Boss you have to make increments in the salary of employees. You have to make increments exactly B times. 
+In a single increment, you can select any one employee and increase its salary by its initial salary. 
+You have to perform B increments in such a way that the largest salary among the employees(after B increments) is minimized.
+Return an integer corresponding to the minimum possible largest salary after B increments. 
+Example:
+Input : 
+  A = [1, 2, 3, 4] 
+  B = 3
+
+Output: 4
+
+Explanation : 
+After the 1st increment, the salaries of the employees would change to [2, 2, 3, 4]
+After the 2nd increment, the salaries of the employees would change to [3, 2, 3, 4]
+After the 3rd increment, the salaries of the employees would change to [4, 2, 3, 4]
+
+
+################################################################################
+
+struct Info{
+    int index;
+    int val;
+};
+
+struct compare{
+    
+    bool operator()(const Info ls,const Info rs)
+    {
+        return ls.val>rs.val  ;
+    }
+};
+
+int Solution::solve(vector<int> &A, int B) {
+   //First intuition in such kind of problem is chossing minimum at each level But itsWRONG
+   
+   //you should check all possible minimum from next step ,and than among them decide ur minimum
+   
+   vector<int> curr=A;//current sallary
+   priority_queue<Info, vector<Info>, compare>  heap;
+   
+     //first push next level possible minimum on queue
+    for(int i=0;i<A.size();i++)
+    {  Info x;
+       x.index=i;
+       x.val=2*A[i];//
+       heap.push(x);
+    }
+ 
+   
+    while(B--)
+    {
+        //find the minimum from heap update its ucrrent position, and than add curr[i]+a[i] to heap again
+        
+        Info temp=heap.top();
+        curr[temp.index]+=A[temp.index];
+        //cout<<"C "<<curr[temp.index];
+        heap.pop();
+        //now push next min possbile for next level..
+        temp.index=temp.index;
+        temp.val=curr[temp.index]+A[temp.index];
+        heap.push(temp);
+    }
+    
+    //my curr element maxium will be my val
+    return *max_element(curr.begin(),curr.end());
+}
