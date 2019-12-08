@@ -1,0 +1,47 @@
+//*********We have a list A, of points(x,y) on the plane. Find the B closest points to the origin (0, 0). 
+Here, the distance between two points on a plane is the Euclidean distance. You may return the answer in any order. The answer 
+is guaranteed to be unique (except for the order that it is in.)******/
+
+//Things learned from this question. If i am etting oveflow issue,.make everything long(it may not
+//be best prectise but it will work)
+struct Info
+{
+    long sum;
+    long x;
+    long y;
+};
+
+
+struct compare{
+    
+    bool operator()(const Info ls, const Info rs)
+    {
+     return ls.sum>rs.sum;
+    }
+};
+vector<vector<int> > Solution::solve(vector<vector<int> > &A, int B) {
+     //i Can do this by simply finding distance and sort them
+    //or using priority queue..priorty quicj as slight bettter time complexity than above method...
+    vector<vector<int>>  ans;
+    priority_queue<Info, vector<Info> , compare>  minHeap;
+    
+    for(int i=0;i<A.size();i++)
+    {
+        long x=A[i][0];
+        long y=A[i][1];
+        long  sum=(x*x+y*y);
+        Info temp;
+        temp.x=x;
+        temp.y=y;
+        temp.sum=sum;
+        minHeap.push(temp);
+    }
+    
+    while(B--)
+    {
+        Info i=minHeap.top();
+        ans.push_back({i.x, i.y});
+        minHeap.pop();
+    }
+    return ans;
+}
