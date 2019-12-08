@@ -1,0 +1,100 @@
+/***Special Median
+Median finding have always been an interesting task in programming. Sometimes we need to find medians repeatedly and this task requires an optimized algorithm for finding the median. Below is one such task: You are given an array A containing N numbers. This array is called special if it satisfies one of the following properties:
+There exists an element A[i] in the array such that A[i] is equal to the median of elements [A[0], A[1], ...., A[i-1]]
+There exists an element A[i] in the array such that A[i] is equal to the median of elements [A[i+1], A[i+2], ...., A[N-1]]
+Note:
+For A[0] consider only the median of elements [A[1], A[2], ..., A[N-1]] (as there are no elements to the left of it)
+For A[N-1] consider only the median of elements [A[0], A[1], ...., A[N-2]]
+You need to output 1/0 (1 --> if array is special, 0 otherwise) Constraints: 0 <= N <= 1000000. A[i] is in the range of a signed 32-bit integer. Example:
+Input:
+A = [4, 6, 8, 4]
+
+Output:
+1
+Here, 6 is equal to the median of [8, 4].
+
+****/
+
+bool FindingMedianUtil(int curr, priority_queue<int>  &left,priority_queue<int ,vector<int> ,greater<int>> &right)
+{
+    //return false;
+    if(left.size()==right.size())
+    {
+        //check id prevois median is equsl to current value if yes return true curr=left.top+right.top/2
+        if(2*curr == (left.top()+right.top()))
+             return true;
+                  
+        //add this element for next median cheking
+        if(curr>right.top())
+        {
+            right.push(curr);
+        }
+        else
+        {
+            left.push(curr);
+        }
+    }
+    else
+     if(left.size()>right.size())
+     {
+         //first check previos median equa to curr number
+         if(curr==left.top())
+         { //cout<<"L "<<left.top()<<curr;
+             return true;
+         
+         }
+         if(curr<left.top())
+         {
+             right.push(left.top());
+             left.pop();
+             left.push(curr);
+         }
+         else
+          right.push(curr);
+     }
+     
+     else{
+         // right>left
+         if(curr==right.top())
+         { // cout<<"R "<<right.top()<<curr;
+             return true;
+         }
+         if(curr>right.top())
+         {
+             left.push(right.top());
+             right.pop();
+             right.push(curr);
+         }
+         else
+         left.push(curr);
+     }
+     
+     return false;
+}
+
+int Solution::solve(vector<int> &A) {
+   //idea is similar to finding median in stream of integr. I just need to apply that in both
+   //forward and backward array.
+    
+    priority_queue<int>  left,left1;
+    priority_queue<int , vector<int> , greater<int>>  right,right1;
+    
+    if(A.size()==0)return 0;
+    
+    left.push(A[0]);
+   // cout<<"hii";
+    for(int i=1;i<A.size();i++)
+        if(FindingMedianUtil(A[i],left,right))
+          return 1;
+          
+     ///left.clear();
+     //right.clear();
+    //cout<<"hii";
+    left1.push(A[A.size()-1]);
+    
+     for(int i=A.size()-2;i>=0;i--)
+        if(FindingMedianUtil(A[i],left1,right1))
+          return 1;
+          
+    return 0;      
+}
