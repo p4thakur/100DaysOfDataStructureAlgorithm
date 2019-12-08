@@ -1,0 +1,93 @@
+Given an array of integers A denoting a stream of integers. A new array of integer B is formed and C are formed. Each time an integer is encountered in a stream append it at the end of B and append median of array B at the C. Find and return the array C. NOTE: 1.If the number of elements are n in B and n is odd then consider medain as B[n/2] ( B must be in sorted order). 2.If the number of elements are n in B and n is even then consider medain as B[n/2-1] ( B must be in sorted order). 
+For Example
+Input 1:
+    A = [1, 2, 3, 4, 5]
+Output 1:
+    C = [1, 1, 2, 2, 3]
+
+    stream          median
+    [1]             1
+    [1, 2]          1
+    [1, 2, 3]       2
+    [1, 2, 3, 4]    2
+    [1, 2, 3, 4, 5] 3
+
+Input 2:
+    A = [5, 17, 100, 11]
+Output 2:
+    C = [5, 5, 17, 11]
+    
+ ########################################################################
+vector<int> Solution::solve(vector<int> &A) {
+    
+    //I can do this using insertion sort, as insetion sort is an online algotitem, but T.c fo that will be N2
+    
+    //I can alsouse BBST, and keep my median at root. But Managing BBST require lot of opeation
+    
+    //we will use idea from BBSt ,but instead of it be use minheap and maxheal to seprate element less
+    //than mdian and greater than it.
+    
+    priority_queue<int ,vector<int>, greater<int>>  minHeap;//min heap at right side
+    priority_queue<int>  maxHeap;
+    
+     vector<int> ans;
+     if(A.size()==0)return ans;
+    //put first elment in left(this logic willl be per ur requirement)
+    maxHeap.push(A[0]);
+    int median=A[0];
+    
+     ans.push_back(median);
+    for(int i=1;i<A.size();i++)
+    {
+        //if heap size equal 
+        if(maxHeap.size()==minHeap.size())
+        {
+            //if curent elment is greter than right than put this to right(as I am seprating smaller and larger element)
+            //, and top of right will be median
+            if(A[i]>minHeap.top())//
+            {
+                minHeap.push(A[i]);
+                median=minHeap.top();
+            }
+            else
+            {  //push it to left
+                maxHeap.push(A[i]);
+                median=maxHeap.top();
+            }
+        }
+        //if left side has more element
+        else if(maxHeap.size()>minHeap.size())
+        {
+            if(A[i]<maxHeap.top())
+            {
+                //take roor from left, push to right, pop that from left, and push new one to heap
+                minHeap.push(maxHeap.top());
+                maxHeap.pop();
+                maxHeap.push(A[i]);
+            }
+            else
+            minHeap.push(A[i]);
+            
+         median=maxHeap.top();// as i want n/2 -1 as my median    
+        }
+        else
+        {//if right side has more elem
+            if(A[i]>minHeap.top())
+            {  //cout<<"val "<<A[i]<<" "<<minHeap.top();
+                maxHeap.push(minHeap.top());
+                minHeap.pop();
+                minHeap.push(A[i]);
+            }
+            else
+            maxHeap.push(A[i]);
+            
+         median=maxHeap.top();    
+        }
+        
+        
+     ans.push_back(median);        
+    }
+    
+    
+    return ans;
+}
