@@ -1,0 +1,57 @@
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+int isValidBSTUtil(TreeNode* root, int min, int max)
+{
+    if(root==NULL)return 1;
+    
+    //if value is greater than min
+    if(root->val <=min  || root->val>=max)
+      return 0;
+      
+     int ls=isValidBSTUtil(root->left,min , root->val);
+     int rs=isValidBSTUtil(root->right, root->val,max);
+     
+     return ls&rs;
+}
+int Solution::isValidBST(TreeNode* A) {
+    
+    //Lest first dow this using top down apprach.It is a goood learning apprach for u.
+    //do try bottom apprach as well, wehre i will keep track of min and max value for each subtree
+    
+    return isValidBSTUtil(A, INT_MIN,INT_MAX);
+    
+/*****************Bottom Up Apprach*****************/
+ bool check(TreeNode *A, int *minn, int *maxx)
+{
+    if (A == NULL)
+    {
+        return true;
+    }
+    int minLeft = INT_MAX, minRight = INT_MAX;
+    int maxLeft = INT_MIN, maxRight = INT_MIN;
+    if(!check(A->left, &minLeft, &maxLeft))
+        return false;
+    if (!check(A->right, &minRight, &maxRight))
+        return false;
+    
+    if (A->left && maxLeft >= A->val)
+    {
+        return false;
+    }
+    if (A->right && minRight <= A->val)
+    {
+        return false;
+    }
+    (*minn) = min(minLeft, A->val);
+    (*maxx) = max(maxRight, A->val);
+    return true;
+}
+    ****/
+}
