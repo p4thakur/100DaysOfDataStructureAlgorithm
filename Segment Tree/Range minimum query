@@ -1,0 +1,73 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <stdio.h>
+#include<bits/stdc++.h>
+
+using namespace std;
+//constructTree(st,0,n-1,0);
+int constructTree(vector<int> &st, vector<int> &A,int s, int e, int index)
+{
+    //if leave node
+    if(s==e)
+    {
+        st[index]=A[s];
+        return A[s];
+    }
+    
+    int mid=s+(e-s)/2;
+    
+     st[index]=min( constructTree(st,A,s,mid,2*index+1)
+                ,constructTree(st, A, mid+1, e, 2*index+2) );
+               
+ return   st[index];              
+    
+}
+//getMinValue(st,0,n-1,l, r,0);
+int getMinValue(vector<int> &st,int ss, int se, int l,int r, int index)
+{
+    //if segement range completly onside given range
+    if(ss>=l && se<=r)
+      return st[index];
+      
+    //if outside range
+    if(l>se || r<ss)return INT_MAX;
+    
+    //else it lies in its children
+    int mid=ss+(se-ss)/2;
+    
+    return min(getMinValue(st,ss,mid,l,r,2*index+1) ,
+                getMinValue(st,mid+1,se,l,r,2*index+2));
+}
+int main()
+{
+    printf("Hello World");//2 5 1 4 9 3
+
+    vector<int>  st,A;
+    int n,x;
+    cin>>n;
+    for(int i=0;i<n;i++)
+      {
+          cin>>x;
+          A.push_back(x);
+      }
+      
+    //hight of segment tree
+    int h=ceil(log2(n));
+    //max numer of node n segment tree
+    int size= 2*(1<<h)-1; //2* 2H-1...for segement tree of hight h
+    st.resize(size);
+    
+    
+    constructTree(st,A,0,n-1,0);
+    //get min between 3 to 5
+    int l,r;
+    cin>>l>>r;
+    cout<<getMinValue(st,0,n-1,l, r,0);
+}
+
