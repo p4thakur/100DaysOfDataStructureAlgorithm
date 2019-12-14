@@ -1,0 +1,95 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <stdio.h>
+#include<bits/stdc++.h>
+
+using namespace std;
+//constructTree(st,0,n-1,0);
+void updateXORvalue(vector<int> &st,int ss,int se,int updatedIndex, int oldVal,int newVal, int index)
+{
+    //if index is out of range dont updste
+      if(updatedIndex>se || updatedIndex<ss)return ;
+    //if in range or hlf range go and update childe as well
+      st[index]=(st[index]^oldVal)^newVal;
+      //if not leafs
+      if(ss!=se)
+      {
+          int mid=ss +(se-ss)/2;
+         updateXORvalue(st,ss,mid,updatedIndex,oldVal,newVal,2*index+1);
+         updateXORvalue(st,mid+1, se,updatedIndex, oldVal,newVal,2*index+1);
+      }
+}
+int constructXORTree(vector<int> &st, vector<int> &A,int s, int e, int index)
+{
+    //if leave node
+    if(s==e)
+    {
+        st[index]=A[s];
+        return A[s];
+    }
+    
+    int mid=s+(e-s)/2;
+    
+     st[index]=constructXORTree(st,A,s,mid,2*index+1) ^
+                constructXORTree(st, A, mid+1, e, 2*index+2);
+               
+ return   st[index];              
+    
+}
+//getMinValue(st,0,n-1,l, r,0);
+int getXORValue(vector<int> &st,int ss, int se, int l,int r, int index)
+{
+    //if segement range completly onside given range
+    if(ss>=l && se<=r)
+      return st[index];
+      
+    //if outside range
+    if(l>se || r<ss)return 0;
+    
+    //else it lies in its children
+    int mid=ss+(se-ss)/2;
+    
+    return (getXORValue(st,ss,mid,l,r,2*index+1) ^
+                getXORValue(st,mid+1,se,l,r,2*index+2));
+}
+int main()
+{
+    printf("Hello World");//2 5 1 4 9 3
+
+    vector<int>  st,A;
+    int n,x;
+    cin>>n;
+    for(int i=0;i<n;i++)
+      {
+          cin>>x;
+          A.push_back(x);
+      }
+      
+    //hight of segment tree
+    int h=ceil(log2(n));
+    //max numer of node n segment tree
+    int size= 2*(1<<h)-1; //2* 2H-1...for segement tree of hight h
+    st.resize(size);
+    
+    
+    constructXORTree(st,A,0,n-1,0);
+    //get min between 3 to 5
+    int l,r;
+    cin>>l>>r;
+    cout<<getXORValue(st,0,n-1,l, r,0);
+    
+    cout<<"Update value\n";
+    int oldVal,newVal;
+    oldVal=A[1];
+    newVal=10;
+    //A[1]=10;
+    updateXORvalue(st,0,n-1,1,oldVal,newVal,0);
+    cout<<getXORValue(st,0,n-1,l, r,0);
+}
+
