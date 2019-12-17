@@ -1,0 +1,42 @@
+Minimum Number of Squares
+Given an integer N. Return count of minimum numbers, sum of whose squares is equal to N. Example: N=6 Possible combinations are :
+(12 + 12 + 12 + 12 + 12 + 12)
+(12 + 12 + 22)
+So, minimum count of numbers is 3 (i.e. 1,1,2). Note: 1 ≤ N ≤ 105
+###################################
+int Solution::countMinSquares(int A) {
+    //This is second type of 1 d question where element of choice are more than 1..
+    //these is similar to the minimun coin require to get the  sum S.
+    //here I need to get sum N. and element that i need to consider are 1 to floor(root(n))
+    
+    //what are the element of choice-- I can choose any element from 1 to rootn. let say m element
+    //so choice dp[sum]=min(dp[sum-firstelemt], dp[sum-secelemt], dp[thirdelemt]...to sum-elem)
+    //dp[i]=this will indicate minimum number of element needed to get sum=i. if i can get sum=infinty
+    
+    vector<int> dp(A+1,INT_MAX);
+    
+    dp[0]=0;
+  
+    for(int i=1;i<=A;i++)
+    {
+        //now like element of choice are from 1 to root n
+        for(int j=1;j<=floor(sqrt(A));j++)
+        {
+            //include this um if you can
+            if(j*j<=i)
+            {
+                int tempres=dp[i-(j*j)];//dp[sum-element]
+                //if temres dont give infinity this mean there is path to get this sum , so now include this
+                //element by doing +1, 
+                if(tempres!=INT_MAX)
+                {
+                    tempres+=1;
+                    if(tempres<dp[i])
+                      dp[i]=tempres;
+                }
+            }
+        }
+    }
+    
+    return dp[A];
+}
