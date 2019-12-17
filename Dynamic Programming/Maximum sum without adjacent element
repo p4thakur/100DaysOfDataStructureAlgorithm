@@ -1,0 +1,81 @@
+Given a 2 x N grid of integer, A, choose numbers such that the sum of the numbers is maximum and no two chosen numbers are 
+adjacent horizontally, vertically or diagonally, and return it.
+Input 2:
+    A = [   [1, 2, 3, 4]
+            [2, 3, 4, 5]    ]
+
+Output 2:
+    We will choose 8
+/***************Solution 1*********************
+
+int Solution::adjacent(vector<vector<int> > &A) {
+    /*https://www.geeksforgeeks.org/maximum-sum-such-that-no-two-elements-are-adjacent/
+    This question is simlar to robing bank, and this one.:)....**/
+    //in short what they are saying is we cannot choose any neibour
+    
+    //if you notce than at any time we are intrested in maximum value of col
+    
+    //and elment of choice-- selct or not slect
+    //I am converting this to 1 d(which is not require , i can solve without it to)
+    int col=A[0].size();
+    vector<int>  v(col);
+    
+    for(int i=0;i<col;i++)
+    {
+        v[i]=max(A[0][i],A[1][i]);
+    }
+    
+    //dp[i]  max sum from start to index i
+    int n=col;
+    vector<int>  dp(n);
+    
+    
+    dp[0]=v[0];
+    if(A.size()==1)
+     return dp[0];
+     
+    dp[1]=max(v[0],v[1]);//for first two numer index=0.1
+    
+    for(int i=2;i<n;i++)
+    {
+        dp[i]=max(dp[i-1], v[i]+dp[i-2]);//dp[i-1]not included, dp[i-2] included
+    }
+    
+    return dp[n-1];
+    
+//space complexit-- O(n).. i can reduce this T.c to O(2)    
+}
+#############################Solution2 space comaplexit constant###########################3
+
+int Solution::adjacent(vector<vector<int> > &A) {
+    //I can solve it using dp.oprtimal substructure and overlapping
+    //nummber of state n.
+    //element of choice --include(A[i]+dp[i-2]) or not inlcude(dp[i-1)  
+    //f[i]= max adjjecent sum from start0 to i....dp[i]=max(iclud, exclude);
+    
+    //now rather than using size n, I cna use just two variable here to represnt i-1 , and i-2
+    int value1, value2;//value1=i-1 and value2 to for i-2
+    
+    //lest first convert it to one d array
+    if(A.size()==0)return 0;
+    int n=A[0].size();
+    vector<int>  v(n);
+    
+    for(int i=0;i<n;i++)
+      v[i]= max(A[0][i],A[1][i]);
+    
+     value2=v[0];  //value of dp[0]....
+     if(A.size()==1)return value2;
+     
+     value1=max(v[0],v[1]);//value of dp[1]
+     int maxval;
+     for(int i=2;i<n;i++)
+     {
+         maxval=max(v[i]+value2, value1);//max(A[i]+dp[i-2], dp[i-1])
+         value2=value1; //i-1 now become i-2
+         value1=maxval;  //current value bceome i-1
+         
+     }
+     
+     return value1;//this is nothing but dp[n-1]
+}
