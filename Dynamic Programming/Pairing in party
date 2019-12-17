@@ -1,0 +1,31 @@
+/******************
+One person can party either alone or can pair up with another person.
+Can you find in how many ways they can party if there are N people 
+*******************/
+
+int Solution::solve(int A) {
+    //Idea is I can use recursion where my element of coice is 1:enjoy alone 2: enjoy in couple
+    
+    //let say nth person come than if he want to anjoy alone than number of ways he can do this is
+    //number of ways n-1 peopel enjoying * number of ways nth person enjoy== dp[n-1]*1
+    
+    //If n th person want to pair than: number of ways in which he can choose pair (n-1) element
+    //so total ways n peope in couple will enjou= number of ways nth person form pair * number of ways 
+    //n-2 people enjoying pary:  (n-1)*1*dp[n-1] ;
+    
+    
+    vector<int>  dp(A+1);//number o ways first N people can enjoy this party
+    
+    //base case  when we have 1 and 2 people
+    dp[1]=1;
+    dp[2]=2;
+    
+    for(int i=3;i<=A;i++)
+    {
+        dp[i]= (dp[i-1] + (i-1)*dp[i-2])%10003;
+       // cout<<dp[i]<<" ";
+    }
+    
+    return dp[A];
+    //I can solve it using constant space as well as at any time i need two prev element(i-1) and i-2
+}
