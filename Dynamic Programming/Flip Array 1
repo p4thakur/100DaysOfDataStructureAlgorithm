@@ -1,0 +1,47 @@
+int Solution::solve(const vector<int> &A) {
+    // 4 star quesstion
+    //This question is like Knapsack where wehere sum=SUm/2 and we need to find min element
+    //element of choice-- if element can be included  than two option--> iclude  exclude
+    int sum=0;
+    
+    for(int i=0;i<A.size();i++)
+       sum+=A[i];
+       
+    int halfsum=sum/2;
+    int n=A.size();
+    //dp[i][j]  minum number of elemet need from A(0...to j) to get sum i
+    vector<vector<int>>  dp(halfsum+1, vector<int>(n+1,INT_MAX));
+    
+    for(int i=0;i<=halfsum;i++)
+      for(int j=0;j<=n ;j++)
+      {
+          if(i==0)dp[i][j]=0;
+          //u can get sum sim i
+          else if (j==0)dp[i][j]=INT_MAX;
+          
+          else
+          if (i-A[j-1]>=0)
+          {
+             // dp[i][j]=min(dp[i-A[j-1]][j-1] , dp[i][j-1])+1;//why this won't work? 1 should be added just for include case
+             //above expression is almost right with one bug in it is that, what if numner I am include let as 
+          
+              //dp[i][j]=min(dp[i-A[j-1]][j-1]+1 , dp[i][j-1]);//it fail because INT+MAX+1 give me neagtive value
+              //so u must check it before adding
+              int include=INT_MAX;
+              if(dp[i-A[j-1]][j-1]!=INT_MAX)
+                 include=dp[i-A[j-1]][j-1]+1;
+                 
+            dp[i][j]=min(include, dp[i][j-1]);     
+          }
+          else
+            dp[i][j]=dp[i][j-1];
+          
+      }
+      //This check is the most important one
+      //now since there is a good possoblity  that i may not get Sum, so i need to look for one with closes sum
+      for(int i=halfsum ;i>=0;i--)
+        if(dp[i][n]!=INT_MAX)
+            return dp[i][n];
+           
+      return INT_MAX;
+}
