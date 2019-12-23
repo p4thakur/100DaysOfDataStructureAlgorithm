@@ -1,0 +1,34 @@
+int mod= 1000000007;
+
+int solveNdigitSum( int N,int sum,vector<vector<int>>  &dp)
+{     
+    //when sum reach tp 0 and no digit left than we got our answer
+     if(N==0 && sum==0)return 1;
+    //base failt cases
+    if(N==0 || sum<0)return 0;
+    
+    if( dp[N][sum]!=-1)
+      return  dp[N][sum];
+    
+    int res=0;
+    
+    //go traverse possble nigbour of this number
+    for(int i=0;i<=9;i++)
+      res=(res+solveNdigitSum(N-1,sum-i,dp))%mod;
+      
+    dp[N][sum]=res ;
+    
+    return  dp[N][sum];
+}
+int Solution::solve(int A, int B) {
+    //I I will be using top dowm apprach for this one.
+    //dp[N][sum]  represent total number of ways of getting sum for N digits.
+    int ways=0;
+    //vector<vector<int>>  dp;//num
+    vector<vector<int>>  dp(A+1, vector<int>(B+1,-1));//number of ways . I used 0 as a defualt 
+    //avoiding any leading 0
+    for(int i=1;i<=9;i++)
+     ways=(ways +solveNdigitSum(A-1,B-i,dp))%mod;
+      
+      return ways;
+}
