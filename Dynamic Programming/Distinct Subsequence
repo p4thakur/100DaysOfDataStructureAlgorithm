@@ -1,0 +1,36 @@
+int Solution::numDistinct(string A, string B) {
+    
+    //dp[i][j] this represnet number of ways in which i can get the substring(0 to j)in subsequence(0..i)
+    //element if choice--> if if chr matches than: incldude +exclude
+    //if not matched than exclude
+    
+    int rows=A.size();
+    int cols=B.size();
+    
+    vector<vector<int>>  dp(rows+1, vector<int>(cols+1,0));
+    
+    //base case first row and first col
+    //if A length is 0
+    for(int i=0;i<cols;i++)
+        dp[0][i]=0;
+     //If b length is 0   
+    for(int i=0;i<rows;i++)
+        dp[i][0]=1;
+        
+    for(int i=1;i<=rows; i++)
+      for(int j=1;j<=cols;j++)
+      {
+          
+          if(A[i-1]==B[j-1])
+          {
+              dp[i][j]=dp[i-1][j-1] +dp[i-1][j]; //include +exclude
+          }
+          else
+          dp[i][j]=dp[i-1][j];  //exclude
+      }
+      
+      return dp[rows][cols];
+      
+    //again notcie at any time all i need is prevoius state . I can reduce the space complexity of my 
+    //solution to liner time
+}
