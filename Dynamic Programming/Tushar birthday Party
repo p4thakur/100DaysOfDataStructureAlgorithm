@@ -1,0 +1,58 @@
+Tushar's Birthday Party
+As it is Tushar's Birthday on March 1st, he decided to throw a party to all his friends at TGI Fridays in Pune. 
+Given are the eating capacity of each friend, filling capacity of each dish and cost of each dish. A friend is satisfied 
+if the sum of the filling capacity of dishes he ate is equal to his capacity.
+Find the minimum cost such that all of Tushar's friends are satisfied (reached their eating capacity).
+
+##################################################################################
+
+int MOD=1000000007;// Why I took this? If i have taken INT_MAX , than while adding cost INT_MAX+cost
+                //it cause overflow
+//I can use INT_mAX as well just make sure before adding check if   dp[i-B[j-1]][j] ==INT_MAX  if yes
+//don't use this as minimum elmenent. Just use the dp[i][j-1] as ur minimum value
+
+int Solution::solve(const vector<int> &A, const vector<int> &B, const vector<int> &C) {
+    //If you notice than what we need to do is for ecery friend we need to assign dishes in such way
+    //that cost of dishese is minimum. This is nothing but variation of knapsack probelem. we need
+    //to do what we do in knapsack for each friend:).
+    
+    //Now rather tahn applying knapsack to each friend what we will do is , we will calculate 
+    //the minimum cost maximum element.(it's subproblems include other elements)
+    
+    int maxelem;
+    
+    for(int i=0;i<A.size();i++)
+      maxelem=max(maxelem, A[i]);
+      
+    //dp[i][j]-- minimum cost to satify  first (0...i) capacity using dishes from (0...j)
+    //element of choice--> see if i can include it. if yes check what gves me minimum cost-including it 
+    //or excluding it min(including ,excluding)--dp[i][j]=min(cost[j] +dp[i-B[j-1]][j-1]), dp[i][j-1])
+    // a slight chnage is i can use dishes as may time as u want so i wil use dp[i-B[j-1]][j]
+    int cost=0;
+    int n=B.size();
+    vector<vector<int>>  dp(maxelem+1, vector<int>(n+1,0));
+    
+    for(int i=0;i<=maxelem;i++)
+      for(int j=0;j<=n;j++)
+        {
+            //if dishes left but no friend to feet
+            if(i==0)dp[i][j]=0;
+            
+            else if (j==0)dp[i][j]=MOD;//i can not fill it
+            
+            else 
+            //see if i f i can include the current dishe
+             if(i-B[j-1]>=0)//rember i can use same dish again
+               dp[i][j]=min( C[j-1] + dp[i-B[j-1]][j], dp[i][j-1] );
+            else//if can't include it
+              dp[i][j]=dp[i][j-1];
+        }
+    
+    //now find the sum of all the ffriends minimum profit
+    for(int i=0;i<A.size();i++)
+       cost+=dp[A[i]][n];
+       
+     return cost;  
+     
+//Try to slove it in O(N) space.     
+}
