@@ -1,0 +1,61 @@
+int Solution::canCompleteCircuit(const vector<int> &A, const vector<int> &B) {
+    //Do this queston again
+    //identifying termination consition is the difficult part of this question
+    
+    //lets do this using same arayay
+    int n=A.size();
+    int start=0;//act like fron of quye
+    int end=1%n;//avt as end of queue
+    
+    int currsum=A[start]-B[start];
+    while(start!=end ||currsum<0)
+    {
+        
+        while(start!=end && currsum<0)
+        {
+            currsum-=(A[start]-B[start]);
+            start=(start+1)%n;
+            
+            if(start==0)//mean i am back to origna fron value
+            return -1;
+        }
+        
+        currsum=currsum+(A[end]-B[end]);
+        end=(end+1)%n;
+        
+    }
+    
+    return start;
+    /** Using queue
+    queue<int>  q;
+    int n=A.size();
+    if(n==0 ||n==1)return n-1;//0 ot -1
+    q.push(0);
+    int index=1;//current index
+    int temp=0;
+    int currsum=(A[0]-B[0]);
+    
+    //keep going till i don't reach to point where start and end both same.or currsum still 0
+    while(q.front()!=index || currsum<0)
+    {
+        
+        while(currsum<0 && q.front()!=index)
+        {
+            int start=q.front();
+            currsum=currsum- (A[start]-B[start]);
+            q.pop();
+            //if I reach to my first start point again.than no solution
+            if(!q.empty()&&q.front()==temp)
+            return -1;
+        }
+        
+        currsum=currsum+ (A[index]-B[index]);
+        q.push((index+1)%n);
+        
+        
+    }
+    
+    return index;
+    
+    ***/
+}
