@@ -1,0 +1,46 @@
+//one of the newewst question of this toppic
+vector<int> Solution::slidingMaximum(const vector<int> &A, int B) {
+    
+    //we wiill maintain a deque in such a way that  it will be sorted at any point
+    //front of queu will contain max and nback min
+    //if u enounter an elment gretaer than rare elment in queue, keep poping , else add to queue
+    
+    deque<int>  dq;
+    vector<int> ans;
+    
+    for(int i=0;i<B;i++)
+     {
+         //before adding elment check for smaller elmenet
+         while(!dq.empty() && A[i]>=A[dq.back()])
+           dq.pop_back();
+           
+         dq.push_back(i);  
+     }
+     
+     ans.push_back(A[dq.front()]);
+     
+     for(int i=B;i<A.size();i++)
+     {
+         
+         
+         //now lest add new elment. before adding it check if queu not empty and elements are smaller
+         
+         while(!dq.empty() && A[i]>=A[dq.back()])
+            dq.pop_back();
+            
+         //now i can easily ad this element
+         dq.push_back(i);
+         
+         //also check if my front elment in que is within my window or not
+         if(!dq.empty() && (i-dq.front()+1)>B)
+            dq.pop_front();
+        
+        // while ((!dq.empty()) && dq.front() <= i - B) 
+        //     dq.pop_front();
+        
+         
+      ans.push_back(A[dq.front()]);
+     }
+     
+     return ans;
+}
