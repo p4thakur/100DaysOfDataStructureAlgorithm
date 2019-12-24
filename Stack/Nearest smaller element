@@ -1,0 +1,26 @@
+vector<int> Solution::prevSmaller(vector<int> &A) {
+    
+    //nearest smaller element.
+    //keep popping from stack till stack not empty or stack has element larger than this
+    
+    stack<int>  st;
+    vector<int>  ans;
+    
+    for(int i=0;i<A.size(); i++)
+    {
+        
+        while(!st.empty() && st.top()>=A[i])
+          st.pop();
+          
+        if(st.empty())
+          ans.push_back(-1);
+          
+        else
+         ans.push_back(st.top());
+         
+      st.push(A[i]);     
+        
+    }
+    
+    return ans;
+}
