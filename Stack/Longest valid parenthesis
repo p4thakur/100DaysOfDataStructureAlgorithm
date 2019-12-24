@@ -1,0 +1,29 @@
+int Solution::longestValidParentheses(string A) {
+    //This is important questions. I ignored it many time thinking itseasy, but it's not
+   //imporatn thing is what you are putting on stack . here it is index
+   //we will push index in the array. it cal also be solve using db in O(n) time
+   stack<int> st;
+   st.push(-1);  //put first elem as -1 so that for cases like ()[0,1], we will get lemgth 2
+   int ans=0;
+   for(int i=0;i<A.size();i++)
+   {
+       if(A[i]=='(')
+       {
+           st.push(i); //push index. this is the important step
+       }
+       
+       else
+       {
+           st.pop();//pop top one from stack(mainlit will be (, but in some case ()
+           
+           if(!st.empty())
+             //check if i can updte my answer
+             ans=max(ans,i-st.top());
+             
+        else
+          st.push(i); // now that
+       }
+   }
+   
+   return ans;
+}
