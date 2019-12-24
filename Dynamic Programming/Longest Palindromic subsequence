@@ -1,0 +1,41 @@
+int Solution::solve(string A) {
+    //there are many ways we can do that
+    //1. find LCS of string and reverse of string 
+    //2. using some obserssvation
+    //we will move tow pointer from both end(i,j). dp[i][j] represent longest common palindrom betwwen i,j
+    //now element of choices are ->if A[i]==A[j]  than 2+dp[i-1][j-1]
+    //->if not matches than look for max(dp[i-1][j], dp[i][j-1])
+    
+    //base cases are imporant here. I need to handle cases for length 1 and length two(Why length two as
+    //as well? becasue let say len 2 charc matches and I did (i-1,j-1) this means i>j which is not right)
+    
+    int lenS=A.size();
+    
+    vector<vector<int>> dp(lenS+1, vector<int>(lenS+1,0));
+    
+    //base case for length 1 string
+    for(int i=0;i<lenS;i++)
+      dp[i][i]=1;
+      
+    //now consider all palindrom from length 2 to N
+    for(int len=2;len<=lenS;len++)
+     {
+         for(int i=0;i<=lenS-len;i++)
+          {
+              int j=i+len-1;
+              
+              //now this part is imporant.check if length if two.this is part of one of base case
+              if(len==2 && A[i]==A[j])
+                dp[i][j]=2;
+                
+              else if (A[i]==A[j])
+                 dp[i][j]=2+dp[i+1][j-1];
+                 
+              else
+                dp[i][j]=max(dp[i+1][j], dp[i][j-1]);
+          }
+     }
+     
+     //my answer will be store in dp[0][lenS-1]//from index 0 to last index.
+    return dp[0][lenS-1]; 
+}
