@@ -1,0 +1,59 @@
+int Solution::largestRectangleArea(vector<int> &A) {
+    
+    //brute force soultion solution is to pic each histogram as the hight , and find max rect withthis bar
+    
+    //If you notice than, for each bar ,its maximum area will bounded by (nerarest minimum on its left
+    //- nearest elment in its right). so this question become easy similar to smalles nearest elemnet
+    
+    //How can be do by using only O(n) extra space
+    
+    int n=A.size();
+    int ans=INT_MIN;
+    stack<int> st;
+    
+    for(int i=0;i<A.size();i++)
+    {
+        if(st.empty() || A[i]>=A[st.top()])
+         {
+             st.push(i);//push index
+         }
+         
+         else
+         {
+             //curent index act like right 
+             int rightBoundry=i;
+             //now keep find area till top of stack elment is greter than this is
+             while(!st.empty() && A[st.top()]>A[i])
+              {
+                   int h=A[st.top()];
+                   
+                   st.pop();
+                
+                  int tempans;
+                  if(st.empty())
+                    tempans=h*i;
+                  else   
+                   tempans= h*(i-st.top()-1);
+                   
+                  ans=max(ans,tempans); 
+              }
+              st.push(i);
+         }
+    }
+    
+    //if why stack is not empty yet, it mean each bar is not explore hey , and remaining bar in icresingorder
+    //there area will we (size of array- index of top elemt)*A[index of top elemtn]
+    
+    while(!st.empty())
+    {
+        
+      int  tp = st.top(); 
+        st.pop(); 
+        int tempans = A[tp] * (st.empty() ? n :  
+                                n - st.top() - 1); 
+  
+       ans=max(ans,tempans);
+    }
+    
+    return ans;
+}
