@@ -1,0 +1,27 @@
+int Solution::trap(const vector<int> &A) {
+    
+    int l=0;
+    int h=A.size()-1;
+    int ans=0;
+    int maxleft=A[l];
+    int maxright=A[h];
+    while(l<=h)
+    {
+        
+        if(A[l]<A[h])
+        {
+            maxleft=max(maxleft,A[l]);
+            ans=ans+(maxleft-A[l]); /// sicne i am sure than left value will be the min max among two(l orr)
+            l++;
+        }
+        
+        else
+        {
+            maxright=max(maxright,A[h]);
+            ans=ans+(maxright-A[h]);
+            h--;
+        }
+    }
+    
+    return ans;
+}
