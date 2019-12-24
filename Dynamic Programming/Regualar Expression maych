@@ -1,0 +1,50 @@
+/***
+ * mistake i made way while checking for *, I was thinking about future string which is wrong.
+ * I should just focus on two option at that time. either inlcude  the charcter  ir exclude it
+*/
+int Solution::isMatch(const string A, const string B) {
+    
+    //dp[i][j]  will represent if i can get pattern B(0 to j) in text (0 to i)
+    //element if choicese are1 :1: getting ?2: getting * 3: matching charcter 4: not matchinng charcter
+    int lenA=A.length();
+    int lenB=B.length();
+    //I am geeting memory limit exceed on using int. It worked fine with boolean
+    vector<vector<bool>>  dp(lenA+1, vector<bool>(lenB+1, false));
+    
+    //base case first what if patter lenth is 0. than answer will always be true
+    for(int i=1;i<=lenA;i++)
+       dp[i][0]=false;  //this will be false, as if my patter length=0, and text have some length than it's a no match
+      
+     dp[0][0]=true; //both empty will be true 
+     //This case require option. consider case when text 0 and patter have ****  
+    //what if  text string is 0 length. than my answer will be 0 in all cases excpt if charcter is '*'
+    for(int j=1;j<=lenB;j++)//j==0  this case was taken care upward
+    {
+        if(B[j-1]=='*')
+          dp[0][j]=dp[0][j-1];//check for subproblem
+         else
+         dp[0][j]=false;
+    }
+    
+    for(int i=1;i<=lenA;i++)
+      for(int j=1;j<=lenB;j++)
+      {
+          //if charcter is ? or matching one than take it
+          if(B[j-1]=='?'|| A[i-1]==B[j-1])
+            dp[i][j]=dp[i-1][j-1];
+            
+          else if (B[j-1]=='*')
+           {
+               //than i can  use it or I can ignore it
+               dp[i][j]= dp[i-1][j] || dp[i][j-1];// imafe mistake here.  using it means use in text, but * remains in same position
+           }
+           else//no match so set its value to false
+           dp[i][j]=false;
+           
+      }
+      
+    return dp[lenA][lenB];  
+    
+//Try to do this in O(N) space complxity similar to this problem
+//https://www.geeksforgeeks.org/subset-sum-problem-osum-space/
+}
