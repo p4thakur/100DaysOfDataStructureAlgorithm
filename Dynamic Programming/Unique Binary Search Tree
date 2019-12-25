@@ -1,0 +1,24 @@
+int Solution::numTrees(int A) {
+    //lets say there are n node. now if we consider ith node as root node than there are;
+    //(i-1) node on the left  and (n-i) node on the right. total combination will be (i-1)*(n-i)
+    //so total number of BST wiil be summation for each i(cosidering each node as root)
+    //element of choice--> for nth elmenet, try all element from 0 to n-1 as root node
+    //dp[i] reprsent number of BST tree possble with ith element
+    
+    vector<int>  dp(A+1,0);
+    
+   dp[0]=1;//I made mistake here, it was set to 0.
+   dp[1]=1;
+   
+   for(int i=2;i<=A;i++)
+   {
+       //consider eleme from 0 to i as root node
+       for(int j=1;j<=i ;j++)
+        {
+            //(i-1)*(n-i)
+            dp[i]+=dp[j-1]*dp[i-j];
+        }
+   }
+   
+   return dp[A];
+}
