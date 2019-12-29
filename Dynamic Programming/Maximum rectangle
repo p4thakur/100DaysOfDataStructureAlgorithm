@@ -1,0 +1,69 @@
+int histgramAreaUtil(vector<int> &hist)
+{  
+    // //here i will use concept of smallest element to the lef or right.
+    //but this can also be done using one stack
+     //store smallest closest elment on right and left side of current elment
+    int n=hist.size();
+    vector<int> prefix(n),suffix(n);
+    stack<int>  st,st2;//they will store the index
+    
+    for(int i=0;i<n;i++)
+    {
+       while(!st.empty() && hist[st.top()]>=hist[i])
+           st.pop();
+       
+       //store top of stack if its not empty else -1  
+         
+         prefix[i]= st.empty()? -1: st.top();
+        
+        st.push(i);
+    }
+    
+    for(int i=n-1; i>=0; i--)
+    {
+     while(!st2.empty() && hist[st2.top()]>=hist[i])
+           st2.pop();
+       
+       //store top of stack if its not empty else n 
+         
+         suffix[i]= st2.empty()? n: st2.top();
+        
+        st2.push(i);   
+    }
+    
+    //now find maximum histogram area
+    int ans=INT_MIN;
+    
+    for(int i=0;i<n;i++)
+    {
+        ans=max(ans, hist[i]*(suffix[i]-prefix[i]-1));
+    }
+    
+    return ans;
+}
+int Solution::maximalRectangle(vector<vector<int> > &A) {
+ 
+ //we will calculate largest histogram area for each consecutive row
+ vector<int>  hist(A[0].size(),0);
+ 
+ int ans=INT_MIN;
+ 
+ for(int i=0;i<A.size();i++)
+ {
+     for(int j=0;j<A[i].size();j++)
+     { 
+         if(A[i][j]==0)//I forgot that part in firt try
+          {
+              hist[j]=0;
+              continue;
+          }
+         hist[j]+=A[i][j];
+     }
+     
+     int tempmax=histgramAreaUtil(hist);
+     //int tempmax=-1;
+     ans=max(tempmax, ans);
+ }
+ 
+ return ans;
+}
