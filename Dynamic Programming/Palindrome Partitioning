@@ -1,0 +1,62 @@
+Given a string A, partition A such that every substring of the partition is a palindrome. 
+Return the minimum cuts needed for a palindrome partitioning of A
+
+######################################################################
+//It's 4 star problem. Do both bottom and top down approach of it
+int Solution::minCut(string A) {
+    
+    //lets first byuild pal[i][j] that idicatte if string from i to j is palidrom or not
+    
+    int n=A.size();
+    
+    vector<vector<int>>  pal(n+1, vector<int>(n+1,0));
+    
+    //base case. 1 charcter is a palindrom
+    for(int i=0;i<n;i++)
+       pal[i][i]=1;
+       
+    //lets try for each palindrom from length 2 to n
+    for(int len=2;len<=n;len++ )//another error i made len<n
+    {
+        for(int i=0;i<n-len+1;i++)
+        {
+            int j=len+i-1;//mistake i made
+            
+            //check if len is two(this case need be handle separtely becuse for lenth to doing dp[i+1][j-1] will cause wrong answer)
+            if(len==2)
+            {
+              if(A[i]==A[j])pal[i][j]=1;  
+            }
+            else
+            {
+                if(A[i]==A[j])
+                  pal[i][j]=pal[i+1][j-1];
+            }
+        }
+    }
+    //cut[i]=->this represnt minumum cut needed to divide string from 0 to index i 
+    vector<int> cut(A.size(),INT_MAX);
+    
+    for(int i=0;i<n;i++ )
+    {
+       //if given string is already a palindrom than not cut needed
+       //cout<<"H"<<pal[0][i];
+       if(pal[0][i]==1)
+       {
+           cut[i]=0;
+          // cout<<"I value"<<i;
+       }
+       else
+       {
+           //check fot all the cut that i can make from o to this i
+           for(int k=0;k<i;k++)
+           {
+               //check if string from(k+1, to i is palindrom if yeas i can inlcude subproblem C[k])
+               if(pal[k+1][i]==1 && cut[k]+1<cut[i])//mistake i made. i didnot look after k i.e k+1
+                  cut[i]=cut[k]+1;
+           }
+       }
+    }
+    
+    return cut[n-1];
+}
