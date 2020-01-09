@@ -1,0 +1,94 @@
+Shortest common supersequence-->
+
+Given two strings A and B, find the shortest string that has both A and B as subsequences.
+If multiple answers exist, you may return any of them. Note: A string S is a subsequence of string T if deleting some number
+of characters from T (possibly 0, and the characters are chosen anywhere from T) results in the string S
+.
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+
+string solve(string A, string B)
+{  //One way of doing this - find LCS,  and add other elements that are not in LCS i.e(m+n)-lcs
+
+   //second way of doing is understanding element of choice:
+   // 1:if charcter matches than it will be part of final string 1+dp[i-1][j-1]
+   //2: if not than include 1 of the charcter , and loof for minmum subsequce recursively 1+min(dp[i-1][j],dp[i][j-1)
+   //dp[i][j]  shortest common subseqnce than include chracter of s(0..i) and B(0..j)
+   int n=A.size();
+   int m=B.size();
+   vector<vector<int>>  dp(n+1, vector<int>(m+1,0));
+   
+   for(int i=0;i<=n;i++)
+     for(int j=0;j<=m;j++)
+     {
+         //base cases when string A length 0  and j=0
+          if(i==0)dp[i][j]=j;
+         
+         else if(j==0)dp[i][j]=i;
+         
+         else if(A[i-1]==B[j-1])//than include one commom character in your string
+             dp[i][j]=1+dp[i-1][j-1];
+             
+         else//inlcude any of one charcter from A and B, and look for one than give min subsequence
+          dp[i][j]=1+min(dp[i-1][j], dp[i][j-1]);
+     }
+     
+     //dp[n][m] store my answer
+     //cout<<"V "<<dp[n][m];
+     int x=n,y=m;
+     string ans="";//i could have intilai to lenth dp[n][m]
+     //this is simlarr to finding LCs string type utility
+     while(x>0 && y>0)//start from end
+     {
+         if(A[x-1]==B[y-1])//check if element are equal than trake any one of the string and move diaognaly x-1,y-1
+         {
+          x=x-1; y=y-1;
+          ans.push_back(A[x]);//or B[y]
+         }
+         else
+         {  //now check which direction i cam from(Optimal direction is one with min vale)
+             if(dp[x-1][y] < dp[x][y-1])
+             {
+                 x=x-1;
+                 ans.push_back(A[x]);
+             }
+             else
+             {
+                 y=y-1;
+                 ans.push_back(B[y]);
+             }
+         }
+     }
+     //I missed that part:).make sure once x=0 or y==0 u add character from other string
+     while(x>0)
+     {
+         x=x-1;
+         ans.push_back(A[x]);
+     }
+     while(y>0)
+     {
+         y=y-1;
+         ans.push_back(B[y]);
+     }
+     
+     reverse(ans.begin(), ans.end());
+     return ans;
+}
+int main()  {
+    // YOUR CODE GOES HERE
+    // Please take input and print output to standard input/output (stdin/stdout)
+    // E.g. 'cin' for input & 'cout' for output
+    //Om
+    int t;
+    cin>>t;
+    string A, B;
+    while(t--)
+    {
+        cin>>A>>B;
+        cout<<solve(A,B)<<endl;
+    }
+    return 0;
+}
