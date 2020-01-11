@@ -1,0 +1,88 @@
+vector<vector<vector<bool>>> dp;
+vector<int>  res1,res2;
+
+bool possible(int index, int curr_sum, int curr_size,vector<int> &original) 
+{ 
+    // base cases 
+    if (curr_size == 0) 
+        return (curr_sum == 0); 
+    if (index >= original.size()) 
+        return false; 
+  
+    // Which means curr_sum cant be found for curr_size 
+    if (dp[index][curr_sum][curr_size] == false) 
+        return false; 
+  
+    if (curr_sum >= original[index]) { 
+        res1.push_back(original[index]); 
+        // Checks if taking this element at 
+        // index i leads to a solution 
+        if (possible(index + 1, curr_sum -  
+        original[index], 
+                     curr_size - 1, original)) 
+            return true; 
+  
+        res1.pop_back(); 
+    } 
+    // Checks if not taking this element at 
+    // index i leads to a solution 
+    if (possible(index + 1, curr_sum, curr_size,original)) 
+        return true; 
+  
+    // If no solution has been found 
+    return dp[index][curr_sum][curr_size] = false; 
+} 
+
+//This question was hard:()
+vector<vector<int> > Solution::avgset(vector<int> &A) {
+    
+    //subset1/size-of-s1 ==array/size of array.
+    //this proble is basically reduce to find ing out whether there exist a subset sum1 of size s1
+    vector<vector<int>>  ans;
+    //sorting is done just because we want result in lexigraphical order
+    sort(A.begin(),A.end());
+    
+    int sum=0;
+    int n=A.size();   
+    for(int i=0;i<A.size();i++)
+       sum+=A[i];
+    
+    dp.clear();
+    res1.clear();
+    res2.clear();
+    //dp[index][su0m][size] this will keep track of if there exist a sum with given size from array(index to end)
+    dp.resize(n, vector<vector<bool>>(sum+1, vector<bool>(n,true)));
+    
+    //now try from size 1 and keep moving forward
+    for(int i=1;i<n;i++)
+    {
+        //make sure given  size  give us decimal value(not floating as mu sum should be in decimal)
+        if((sum*i)%n!=0)continue;
+        
+        int subsetSum1= (sum*i)/n;
+        //check if i can get the subset sum with current size(i)
+        //cout<<"hi";
+        if(possible(0,subsetSum1,i,A))
+        { // cout<<"hey";
+           unordered_map<int,int>  m;
+           for(int i=0;i<res1.size() ;i++)
+               m[res1[i]]++;
+            
+            //I already have result in res1, fill rest remaing that are not in res1 to res2
+            for(int i=0;i<A.size();i++)
+             if(m.find(A[i])==m.end() )
+               res2.push_back(A[i]);
+             else  
+                {m[A[i]]--;//this is for handling dulicate
+                
+                    if(m[A[i]]==0)m.erase(A[i]);//I have to erase the key
+                }
+            ans.push_back(res1);
+            ans.push_back(res2);
+            
+            return ans;
+        }
+        
+    }
+    return ans;
+}
