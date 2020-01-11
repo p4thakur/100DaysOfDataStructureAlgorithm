@@ -1,0 +1,75 @@
+Min Sum Path in Triangle
+Given a triangle, find the minimum path sum from top to bottom. Each step you may move to adjacent numbers on the row below. 
+For example, given the following triangle
+[
+     [2],
+    [3,4],
+   [6,5,7],
+  [4,1,8,3]
+]
+The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11).
+###############################################################
+int Solution::minimumTotal(vector<vector<int> > &A) {
+    // Do not write main() function.
+    // Do not read input, instead use the arguments to the function.
+    // Do not print the output, instead return values as specified
+    // Still have a doubt. Checkout www.interviewbit.com/pages/sample_codes/ for more details
+    
+    int rows=A.size();
+    if(rows==0)return 0;
+    vector<int>  dp(rows);
+    
+    //lets first initiall filled it with last row element
+    for(int i=0;i<rows;i++)
+      dp[i]=A[rows-1][i];
+      
+    //now move upward in the row
+    for(int i=rows-2; i>=0 ;i--)
+      {
+          //for each row use next row value to get result
+          for(int j=0;j<=i;j++)
+          {
+            dp[j]= min(dp[j], dp[j+1] ) +A[i][j];
+          
+             // cout<<dp[j]<<" ";
+          } 
+      //  cout<<"S";   
+      }
+      
+      //at end my answer will be store in dp[0]
+      
+      return dp[0];
+//     int rows=A.size();
+//     int cols=rows;
+    
+//     vector<vector<int>>  dp(rows, vector<int>(cols,INT_MAX));
+//     for(int i=0;i<rows;i++)
+//       for(int j=0;j<A[i].size();j++)
+//       {
+//           //if first row
+//           if(i==0)
+//           {
+//               dp[i][j]=A[i][j];
+//               // cout<<"first row"<<dp[i][j];
+//                 continue;
+//             }
+//          //for row 2 onward check if i can inlude j-1,j,j+1 from upper row or not
+//          int first=INT_MAX,second=INT_MAX,third=INT_MAX;
+         
+//          if(j-1>=0)
+//           first=dp[i-1][j-1];
+//          if(j<A[i].size()-1)  
+//             second=dp[i-1][j];
+//           if(j+1< A[i].size()-1)
+//             third=dp[i-1][j+1];
+            
+//          dp[i][j]=min(first,min(second, third))+A[i][j];  
+//          cout<<"T "<<dp[i][j];
+//       }
+//       int minval=INT_MAX;
+//       //now traverse last row and return result
+//       for(int i=0;i<rows;i++)
+//         minval=min(minval,dp[rows-1][i]);
+        
+//   return minval;        
+}
