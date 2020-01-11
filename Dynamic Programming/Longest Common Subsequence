@@ -1,0 +1,38 @@
+Longest Common Subsequence
+Given two strings A and B. Find the longest common sequence ( A sequence which does not need to be contiguous),
+which is common in both the strings. You need to return the length of such longest common subsequence. NOTE:
+
+###########################################################
+
+
+int Solution::solve(string A, string B) {
+    //agin foucs on the points
+    //number of state= m*n
+    //dp[i][j]-==LCs of string (0 to i)-lenthg i and s2(0 to j) length j
+    
+    //element of choice two-->if element are equal just include it --dp[i-1][j-1]
+    //if element not equal than,  move forward in one of the string .slect max of that max(dp[i-1][j],dp[i][j-1])
+    int rows=A.size();
+    int cols=B.size();
+    
+    vector<vector<int>>  dp(rows+1, vector<int>(cols+1,0));
+    
+    for(int i=0;i<=rows;i++)
+      for(int j=0;j<=cols;j++)
+      {
+          //base conditon for first row and col
+          if(i==0 || j==0)dp[i][j]=0;
+          
+          else
+            if(A[i-1]==B[j-1])
+            {
+                //than iclude this element tmy answer
+                dp[i][j]=1+dp[i-1][j-1];
+            }
+          else
+           dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+      }
+      
+      return dp[rows][cols];
+    //solve to print that LCS  
+}
