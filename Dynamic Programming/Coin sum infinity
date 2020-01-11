@@ -1,0 +1,45 @@
+ Coin sum Infinity:::-
+ 
+ you are given a set of coins S. In how many ways can you make sum N assuming you
+ have infinite amount of each coin in the set. Note : Coins in set S will be unique.
+################################################
+int Solution::coinchange2(vector<int> &A, int B) {
+    //we can do this usning both 2 d and 1 d.
+    /********
+    The approach is I am using dp[n]  which indicates the number of ways I can make sum N.
+     element of choice we have are :
+        1: if  I can include current coin in sum than -> 
+        dp[i]= dp[i-coin[j]](include that coin) + dp[i](choose not to include  this current coin
+        
+        2)else coin val > curr sum so don't iclude this or u can say dp[i]=dp[i]
+    ********/
+    vector<int>  dp(B+1,0);
+    int n=A.size();
+    dp[0]=1;
+    
+
+     
+     //try each coin one by one too iclude thisin our resultant sum 
+     for(int i=0;i<n;i++)
+        for(int j=1;j<=B;j++)
+        {
+          if(j-A[i]>=0)//than i can include this elment d[j-A[i] or i can chosse not to dp[i]..add botj
+          dp[j]=(dp[j]+ dp[j-A[i]])%1000007;
+        }
+     
+     return dp[B];
+     //Above thing doesn't work I want to know why I have to use first looop inside
+         // for(int i=1 ;i<=B ;i++)
+    //  {
+       
+    //      for(int j=0;j<n;j++)
+    //      {
+    //          if(i-A[j]>=0)
+    //          { 
+    //             dp[i]=dp[i]+dp[i-A[j]];
+              
+    //          }
+    //      }
+    //  }
+     
+}
