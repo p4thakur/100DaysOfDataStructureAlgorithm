@@ -1,0 +1,44 @@
+Unique Paths in a Grid
+Given a grid of size m * n, lets assume you are starting at (1,1) and your goal is to reach (m,n). At any instance, if you are on (x,y), you can either go to (x, y + 1) or (x + 1, y). Now consider if some obstacles are added to the grids. How many unique paths would there be? An obstacle and empty space is marked as 1 and 0 respectively in the grid. Example : There is one obstacle in the middle of a 3x3 grid as illustrated below.
+[
+  [0,0,0],
+  [0,1,0],
+  [0,0,0]
+]
+The total number of unique paths is 2.
+
+##############################################################
+int Solution::uniquePathsWithObstacles(vector<vector<int> > &A) {
+    //i would have been simple permutaion combination question if i there were no obstacle
+    
+    //here nu,ner of stae will be = row* cols
+    //dp[i][j] will represnt number of ways i can reach from start(0,0) to current index
+    int rows=A.size();
+    int cols=A[0].size();
+    
+    vector<vector<int>>  dp(rows,vector<int>(cols,0));
+    
+    for(int i=0;i<rows;i++)
+    {
+        for(int j=0;j<cols;j++)
+        {
+            if(A[i][j]==0)
+            {
+              if(i==0 &&j==0)dp[i][j]=1;
+            //fill 1 rows
+             else if(i==0)
+              dp[i][j]=dp[i][j-1];
+            //fill first col 
+              else if(j==0)
+              dp[i][j]=dp[i-1][j];
+              //at this point i wont be in 0th row or col
+              else
+              dp[i][j]=dp[i-1][j]+dp[i][j-1];
+            }
+            //else dp[i][j]=0 will remain xero
+             
+        }
+    }
+    
+    return dp[rows-1][cols-1];
+}
