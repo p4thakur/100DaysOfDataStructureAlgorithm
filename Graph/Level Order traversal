@@ -1,0 +1,49 @@
+
+############################################################################################
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+vector<vector<int> > Solution::levelOrder(TreeNode* A) {
+    
+    //I will use BFS and  and push elment in queue with order of left than right.
+    
+    //queue contain node adress and its current distance from root
+    queue<pair<TreeNode*, int>> q;
+    
+    //I don;t know what could be the size of thefinal answer so i can't intialize my ans with some size
+   // vector<vector<int>>  ans(100);
+   vector<vector<int>>  ans;
+   vector<int>  temp;
+    q.push({A,0});
+    
+    while(!q.empty())
+    {
+        pair<TreeNode* , int> temp=q.front();
+        q.pop();
+        
+        
+        TreeNode* treeNode=temp.first;
+        int h=temp.second;
+         
+         //Now this part is something i learn recently and it helps me not worry about inittlizing
+         //my result array initially. I can add the size at run time
+         if(ans.size()!=h+1)//it means that this is first time i fall into new level
+          {
+              ans.push_back(vector<int>());
+          }
+         ans[h].push_back(treeNode->val);
+         if(treeNode->left)
+           q.push({treeNode->left, h+1});
+           
+          if(treeNode->right)  
+             q.push({treeNode->right, h+1});
+    }
+    
+    return ans;
+}
