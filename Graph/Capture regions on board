@@ -1,0 +1,157 @@
+Capture Regions on Board
+Given a 2D board containing 'X' and 'O', capture all regions 
+surrounded by 'X'. A region is captured by flipping all 'O's into 'X's in that surrounded region. Input Form
+
+####################################################
+
+int row,col;
+int dx[]={1,0,-1,0};
+int dy[]={0,1,0,-1};
+
+bool isValid(int x,int y)
+{
+    if(x>=0 && y>=0 && x<row && y<col)
+    return true;
+    
+  return false;    
+}
+
+void bfsUtileMethod2(vector<vector<char> > &A,int x,int y)
+{
+   queue<pair<int,int>> q;
+  // cout<<"FFFFF";
+   q.push({x,y});
+     //cout<<"hii";
+   while(!q.empty())
+   {
+       //cout<<"hii";
+       pair<int,int>  temp=q.front();
+       q.pop();
+     
+       A[temp.first][temp.second]='O';
+   
+       //cout<<"t"<<temp.first<<temp.second;
+       for(int i=0;i<4;i++)
+       {
+        int tempx=temp.first + dx[i];   
+        int tempy=temp.second+ dy[i];
+        
+        if(isValid(tempx,tempy) && A[tempx][tempy]=='K')
+        {
+            q.push({tempx,tempy});
+        }
+        
+       }
+   }   
+}
+
+
+void Solution::solve(vector<vector<char> > &A) {
+    
+    //Appraoch 2 without using Extra memory
+    //1: traverse matix and mark all O to K
+    //2:now traverse boundry and mark 'K' present their and nighbour as 'O'
+    //3: again traverse whole matrix and chenge the remaing K to 'X'.
+    //In MS-Paint, when we take the brush to a pixel and click, the color of the region of that pixel is replaced with a new selected color. 
+    
+    row=A.size();
+    col=A[0].size();
+    
+      //1. change all the O to K first .
+    for(int i=0;i<row;i++)
+      for(int j=0;j<col;j++)
+        if(A[i][j]=='O')
+           {A[i][j]='K';
+          
+           }
+    //2.Now travere the boundry and change value at - to to O           
+    for(int i=0;i<col;i++)
+     {
+         if(A[0][i]=='K')bfsUtileMethod2(A,0,i);
+     
+         if(A[row-1][i]=='K')bfsUtileMethod2(A,row-1,i);
+     }  
+       //for first and last col
+     for(int i=0;i<row;i++)
+     {
+         if(A[i][0]=='K')bfsUtileMethod2(A,i,0);
+         
+         if(A[i][col-1]=='K')bfsUtileMethod2(A,i,col-1);
+     }
+     
+     //step 3: change all the remaing K to X
+    for(int i=0;i<row;i++)
+      for(int j=0;j<col;j++)
+        if(A[i][j]=='K')
+             A[i][j]='X';
+           
+  return;    
+  
+  /*****  
+  //Approach one:
+  //1:- check all the O and mark thema and thier neighbouring O to visited
+  //2:-> Now change the remaing O that are not visited till this point to X/
+  //This apprac take extra memory for visited array .
+    row=A.size();
+    col=A[0].size();
+
+   row=A.size();
+    col=A[0].size()
+    vector<vector<bool>> visited(row, vector<bool>(col,false));
+    
+    //first and last row check
+    for(int i=0;i<col;i++)
+     {
+         if(A[0][i]=='O')bfs1(A,0,i,visited);
+     
+         if(A[row-1][i]=='O')bfs1(A,row-1,i,visited);
+     }
+     
+     //for first and last col
+     for(int i=0;i<row;i++)
+     {
+         if(A[i][0]=='O')bfs1(A,i,0,visited);
+         
+         if(A[i][col-1]=='O')bfs1(A,i,col-1,visited);
+     }
+
+   //now whatever O left go and chege them to O
+   for(int i=0;i<row;i++)
+     for(int j=0;j<col;j++)
+     {  
+         if(!visited[i][j] && A[i][j]=='O')
+           A[i][j]='X';//bfs(A,i,j,visited);
+     }
+     
+     
+void bfs1(vector<vector<char> > &A,int x,int y, vector<vector<bool>> &visited)
+{
+
+   queue<pair<int,int>> q;
+   
+   q.push({x,y});
+
+   while(!q.empty())
+   {
+       
+       pair<int,int>  temp=q.front();
+       q.pop();
+       visited[temp.first][temp.second]=true;
+           //if(temp.first==4 && temp.second==3)
+       //cout<<"RR"<<temp.first<<temp.second;
+       for(int i=0;i<4;i++)
+       {
+        int tempx=temp.first + dx[i];   
+        int tempy=temp.second+ dy[i];
+           
+        if(isValid(tempx,tempy) && A[tempx][tempy]=='O' && !visited[tempx][tempy])
+        {
+            q.push({tempx,tempy});
+        }
+        
+       }
+   }
+}
+ 
+    **********/
+}
