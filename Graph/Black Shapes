@@ -1,0 +1,68 @@
+Given N x M character matrix A of O's and X's, where O = white, X = black.
+Return the number of black shapes. A black shape consists of one or more adjacent X's (diagonals not included) 
+Input Forma
+
+#########################################
+
+int row;
+int col;
+
+// 0,1  1,0  0,-1 -1,0
+int dx[]={0,1,0,-1};
+int dy[]={1,0,-1,0};
+
+bool isValid(int x,int y)
+{
+   if(x>=0 && y>=0 && x<row && y<col)
+     return true;
+     
+return false;     
+}
+
+void BFSUtil(vector<string> &A,  vector<vector<int>>  &visited,int x,int y)
+{
+    
+    queue<pair<int,int>> q;
+    
+    q.push({x,y});
+    
+    while(!q.empty())
+    {
+        pair<int,int>  temp=q.front();
+        int tempx=temp.first;
+        int tempy=temp.second;
+        q.pop();
+        for(int i=0;i<4;i++)
+        {
+            int x1=tempx + dx[i];
+            int y1=tempy+dy[i];
+            
+            if(isValid(x1,y1) && !visited[x1][y1] && A[x1][y1]=='X') //order is very important.. I can't write visited sondition before isavlid .it will throw segmentation fault
+                {
+                   visited[x1][y1]=true;
+                   q.push({x1,y1});
+                }
+            
+        }
+        
+    }
+}
+
+int Solution::black(vector<string> &A) {
+    
+    
+     row=A.size();
+     col=A[0].size();
+      int count=0;
+    vector<vector<int>>  visited(row, vector<int>(col,false));
+    
+    for(int i=0;i<row;i++)
+      for(int j=0;j<col;j++)
+        if(A[i][j]=='X' && !visited[i][j])
+        {
+            BFSUtil(A, visited,i,j);
+            count++;
+        }
+        
+  return count;        
+}
