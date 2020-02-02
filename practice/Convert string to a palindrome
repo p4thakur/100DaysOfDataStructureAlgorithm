@@ -1,0 +1,64 @@
+Given a String S1 and String S2. Convert string S1 to a palindrome string such S2 is a substring of that palindromic string.
+Only operation allowed on S1 is replacement of any character with any other character. Find minimum number of operations required.
+
+###############################################################################################################
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int t;
+    cin>>t;
+    while(t--){
+	string s1,s2;
+	cin>>s1;
+	cin>>s2
+	
+	int n =s1.size();
+	int m =s2.size();
+	
+	if(n<m){cout<<"unlucky"<<"\n";continue;}
+	
+	int ans=INT_MAX;string f="";
+	for(int i=0;i<=n-m;i++){
+	    int count=0;
+	    string p =s1;
+	    for(int j=i;j<i+m;j++){
+	        if(p[j]!=s2[j-i]){p[j]=s2[j-i];count++;}
+	    }
+	    //cout<<p<<"\n";
+	    int j=0;int k=p.size()-1;
+	    int flag=0;
+	    
+	    while(j<k){
+        	  if(p[j]!=p[k]){
+        	        if(j>=i&&j<i+m){
+        	            if(k>=i&&k<i+m){flag=1;break;}
+        	            else {count++;p[k]=p[j];}
+        	        }
+        	        else if(k>=i&&k<i+m){
+        	            if(j>=i&&j<i+m){flag=1;break;}
+        	            else {count++;p[j]=p[k];}
+        	        }
+        	        else {
+        	            char c=min(p[j],p[k]);
+        	            p[j]=c;
+        	            p[k]=c;
+        	            count++;
+        	        }
+        	    }
+        	j++;k--;    
+	        
+	    }
+	    
+	  //  cout<<p<<count<<"\n";
+	    
+	     if(flag==0){
+	         if(ans>count){f=p;ans=count;}
+	         else if(ans==count)f=min(p,f);
+	     }
+	}
+	if(f!="")cout<<ans<<"\n";
+	else cout<<"-1"<<"\n";
+}
+	return 0;
+}
