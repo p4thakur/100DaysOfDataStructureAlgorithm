@@ -1,0 +1,89 @@
+Given a matrix of integers A of size N x M consisting of 0, 1 or 2. Each cell can have three values:
+The value 0 representing an empty cell.
+The value 1 representing a fresh orange.
+The value 2 representing a rotten orange.
+Every minute, any fresh orange that is adjacent (Left, Right, Top, or Bottom) to a rotten orange becomes rotten. R
+eturn the minimum number of minutes that must elapse until no cell has a fresh orange.
+If this is impossible, return -1 instead.
+
+##############################################
+
+int row,col;
+
+int dx[]={1,0,-1,0};
+int dy[]={0,-1,0,1};
+
+bool isValid(int x,int y)
+{
+    if(x<0 || y<0 || x>=row || y>=col)
+      return false;
+      
+      return true;
+}
+
+int Solution::solve(vector<vector<int> > &A) {
+    //Idea is based on multiple shource BFS
+    //first put all the rotten tomate on a queue
+    
+     row=A.size();
+     col=A[0].size();
+    
+    queue<pair<int,int>> q;
+    
+    vector<vector<bool>>  visited(row, vector<bool>(col,false));
+    
+    //put all the starting point in the qeueue first
+    for(int i=0;i<row;i++)
+      for(int j=0;j<col;j++)
+       if(A[i][j]==2)
+          {
+              q.push({i,j});
+              visited[i][j]=true;
+          }
+    //add marker at the end. marker seprate the set of element at each time interval(at each level)      
+    q.push({-1,-1});
+    int count=0;//store time
+    
+    while(!q.empty())
+    {
+        pair<int,int>  temp=q.front();
+        int tempx=temp.first;
+        int tempy=temp.second;
+        q.pop();
+        //check if i reach to end of marker. if so i am done  with one level.remove {-1,-1} and add it
+        //to the end of queue
+        if(tempx==-1 && tempy==-1)
+        {
+           
+            if(!q.empty())
+            {
+                count++;
+                q.push({-1,-1});
+            }
+         continue;    
+        }
+        
+        for(int i=0;i<4;i++)
+        {
+            int x1=tempx+dx[i];
+            int y1=tempy+ dy[i];
+            if(isValid(x1,y1) && !visited[x1][y1] && A[x1][y1]==1)
+             {
+                 visited[x1][y1]=true;
+                 A[x1][y1]=2;//do i need this?yes for this question i need this too, so that at last i can check if some rooten tommato left or not
+                 q.push({x1,y1});
+             }
+        }
+    }
+    
+    //at the end check none of the tomato should be left.
+    for(int i=0;i<row;i++)
+      for(int j=0;j<col;j++)
+       if(A[i][j]==1)
+          {
+              return -1;
+          }
+    
+    return count;
+          
+}
