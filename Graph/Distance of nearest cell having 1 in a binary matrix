@@ -1,0 +1,70 @@
+
+Distance of nearest cell having 1 in a binary matrix
+Given a matrix of integers A of size N x M consisting of 0 or 1. For each cell of the matrix find the distance of nearest
+1 in the matrix. Distance between two cells (x1, y1) and (x2, y2) is defined as |x1 - y1| + |x2 - y2|. Find and return a matrix B 
+of size N x M which defines for each cell in A distance of nearest 1 in the matrix A. Note:
+Your solution will run on multiple test cases. If you are using global variables, make sure to clear them.
+There is atleast one 1 is present in the matrix
+############################################
+
+
+
+int dx[]={1,0,-1,0};
+int dy[]={0,-1,0,1};
+int row, col;
+
+bool isValid(int x,int y)
+{
+    if(x>=0 && y>=0 && x<row && y<col)
+       return true;
+       
+    return false;   
+}
+
+vector<vector<int> > Solution::solve(vector<vector<int> > &A) {
+    
+    //idea is based on multipe soroec BFS
+    row=A.size();
+    col=A[0].size();
+    //dist from  source(1,1) or( I can using visited array and keep track of count while moving in BFS)
+    vector<vector<int>>  dist(row, vector<int>(col,INT_MAX));
+    
+    queue<pair<int,int>> q;
+    
+    for(int i=0;i<row;i++)
+       for(int j=0;j<col;j++)
+         {
+             if(A[i][j]==1)
+               {
+                   dist[i][j]=0;
+                   q.push({i,j});      
+                  
+               }
+         }
+         
+       
+         
+         
+    while(!q.empty())
+    {
+        pair<int,int>  temp=q.front();
+        int tempx=temp.first;
+        int tempy=temp.second;
+        
+        q.pop();
+        
+        for(int i=0;i<4;i++)
+        {
+            int x1=tempx+dx[i];
+            int y1=tempy+ dy[i];
+            
+            if(isValid(x1,y1) && dist[tempx][tempy]+1<dist[x1][y1])
+             {
+                 dist[x1][y1]=dist[tempx][tempy]+1;
+                 q.push({x1,y1});
+             }
+        }
+    }
+    
+    return dist;
+}
