@@ -1,0 +1,80 @@
+Shortest Distance in a Maze
+Given a matrix of integers A of size N x M describing a maze. The maze consists of empty locations and walls. 
+1 represents a wall in a matrix and 0 represents an empty location in a wall. There is a ball trapped in a maze.
+The ball can go through empty spaces by rolling up, down, left or right, but it won't stop rolling until hitting a wall.
+When the ball stops, it could choose the next direction. Given two array of integers of size B and C of size 2 denoting 
+the starting and destination position of the ball. Find the shortest distance for the ball to stop at the destination.
+The distance is defined by the number of empty spaces traveled by the ball from the starting position (excluded) to the 
+destination (included). If the ball cannot stop at the destination, return -1. Note:
+Rows are numbered from top to bottom and columns are numbered from left to right.
+Assume the border of the maze are all walls.
+Both the starting position of the ball and the destination position of the ball exist on an empty space.
+Both the starting and destination positions will not be at the same position initially.
+
+Input Format
+The first argument given is the integer matrix A.
+The second argument given is an array of integer B.
+The third argument if an array of integer C.
+
+
+
+################################################################################################
+
+int dx[]={1,0,-1,0};
+int dy[]={0,-1,0,1};
+int row, col;
+
+bool isValid(int x,int y)
+{
+    if(x>=0 && y>=0 && x<row && y<col)
+       return true;
+       
+    return false;   
+}
+//It's a new question.
+int Solution::solve(vector<vector<int> > &A, vector<int> &B, vector<int> &C) {
+ //   https://leetcode.com/articles/the-maze-ii/
+ 
+    row=A.size();
+    col=A[0].size();
+   //initialize distance to INT MAX
+   vector<vector<int>> dist(row, vector<int>(col,INT_MAX));
+   //distance from src =0,0
+   dist[B[0]][B[1]]=0;
+   
+   queue<pair<int,int>>  q;
+   q.push({B[0],B[1]});
+   
+   while(!q.empty())
+    {
+        pair<int,int>  temp=q.front();
+        int sx=temp.first;
+        int sy=temp.second;
+        
+         q.pop();
+         
+         for(int i=0;i<4;i++)
+         {
+             int x1=sx +dx[i];
+             int y1=sy +dy[i];
+             int count=0;
+             //keep traversing in that direction till you get wall
+             while(isValid(x1,y1) && A[x1][y1]==0)
+             {   count++;
+                 x1=x1+dx[i];
+                 y1=y1 + dy[i];
+             }
+             
+             //see if distance is to be updated.
+            if(dist[sx][sy] +count< dist[x1- dx[i]][y1-dy[i]])
+             {
+                 dist[x1- dx[i]][y1-dy[i]]=dist[sx][sy] +count;
+                 q.push({x1-dx[i] , y1-dy[i]});
+             }
+         }
+    }
+    
+    if(dist[C[0]][C[1]]==INT_MAX)
+      return -1;
+    return  dist[C[0]][C[1]]; 
+}
