@@ -1,0 +1,68 @@
+
+
+Given an array of integers A representing chain of 2-D matices such that the dimensions of ith matrix is A[i-1] x A[i].
+
+Find the most efficient way to multiply these matrices together. The problem is not actually to perform the multiplications, 
+but merely to decide in which order to perform the multiplications.
+
+Return the minimum number of multiplications needed to multiply the chain.
+#########################
+
+
+/***  Recursive approach of doing it
+//we need to find out where to put the parenthesis . here we are looking in range of star to end
+int MultiPlicationRecUtil(vector<int> &A,int start, int end)
+{
+     //this will happen for 2 matirx
+    if(start==end)return 0;
+    
+    int ans=INT_MAX;
+    int val;
+    //try to put braces in all the postion from start to end
+    for(int k=start;k<end;k++)
+    {
+        val=MultiPlicationRecUtil(A, start, k) + 
+               MultiPlicationRecUtil(A, k+1,end)
+               + A[start-1]*A[k]*A[end];//why start -1?this is how i implemented here in this question.
+    
+        ans=min(ans, val);
+    }
+    
+    return ans;
+}
+***/
+int Solution::solve(vector<int> &A) {
+    
+    int n=A.size();
+    /***
+    if(n==1)return 0;
+    return MultiPlicationRecUtil(A,1,n-1);
+    ***/
+    vector<vector<int>> dp(n, vector<int>(n,0));
+    
+    for(int i=0;i<n;i++)
+      dp[i][i]=0;
+      
+      
+    //now start from lenth 2 to n-1.(why n-1 ?for n number i have n-1 choice of putting paranthesis)
+    for(int len=2;len<n;len++)
+    {
+        //it won't enter in thhis loop for len 2//which make sense also as for 2 matrix no need for any parenthesis
+        for(int left=1;left< n- len+1 ; left++)
+         {
+             int right=left+len-1;
+             
+             dp[left][right]=INT_MAX;
+             
+             for(int k=left;k<right;k++)
+             {
+              int temp=dp[left][k] +dp[k+1][right]
+                       + A[left-1]* A[k]*A[right];
+                       
+              dp[left][right]=min(temp,dp[left][right]);           
+             }
+         }
+    }
+    
+    return dp[1][n-1]; 
+}
